@@ -39,6 +39,8 @@ public:
     
 protected:
         Game(int numberOfPlayers);
+    //all games have at least three players, the games with more players will add them during construction
+    vector<Player> Players;
    
 private:
     Dice d6; // the die that gets rolled all of the time
@@ -51,11 +53,7 @@ private:
     Playset playset1;
     int numbersAvailable[6]; //use in the setup and the tilt
     
-    //all games have at least three players
-    Player general;
-    Player player1;
-    Player player2;
-    Player player3;
+
     
     //used in the setup to ensure all needed game elements are chosen first
     bool AllRelationshipsChosen = false;

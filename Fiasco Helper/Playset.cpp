@@ -215,6 +215,7 @@ void Playset::load()
     return;
 }
 
+//treats this like an array
 GameElement& Playset::getItem(int a, int b, int c)
 {
     

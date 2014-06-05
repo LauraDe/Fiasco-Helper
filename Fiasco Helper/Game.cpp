@@ -7,7 +7,7 @@
 //
 
 #include "Game.h"
-
+#include <assert.h>
 /*
  TODO:
  void Round1();
@@ -16,8 +16,12 @@
  void Round2();
  void Aftermath();
  
- void assignNonRelationshipElement(GameElement element, int playerNumber);
+;
  void assignRelationship(Relationship, int player1, int player2);
+ 
+ 
+ NOTES:
+ The playset is loaded into the arrays of game elements BEFORE the Game constructor is called.
  
  */
 
@@ -26,6 +30,19 @@ Game::Game(int numberOfPlayers)
     this -> numberOfPlayers = numberOfPlayers;
     lightDice[0] = (this -> numberOfPlayers * 2);
     darkDice[0] = (this -> numberOfPlayers * 2);
+    
+    Players.resize(numberOfPlayers);
+    string temp;
+    Players[0].name = "General";
+    
+    for (int i = 1; i <= numberOfPlayers; ++i)
+    {
+        cout << "What is the name of player " << i << "?" << endl;
+        cin >> temp;
+        Players[i].name = temp;
+    }
+    
+    cout << "This game has " << Game::Players.size() << " (" << numberOfPlayers << ") players." << endl;
     
 }
 
@@ -140,5 +157,11 @@ void Game::SetupMenuOfAvailableGameElements()
 }
 
 
-
+void Game::assignNonRelationshipElement(GameElement element, int playerNumber)
+{
+    assert(playerNumber > 0 && playerNumber <= Game::numberOfPlayers); //make sure that the number of players is valid
+    
+    
+    
+}
 
