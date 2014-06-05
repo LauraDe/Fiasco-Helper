@@ -12,3 +12,6 @@ I am not officially affiliated with Fiasco in any way.
 _________
 
 This is currently a work in progress. 
+--------
+NOTE: 
+for this to work if you pull it, you will need to change the filename variable to be set to your filepath. This is found on line 18 of Playset.cpp
