@@ -35,7 +35,7 @@ Game::Game(int numberOfPlayers)
     string temp;
     Players[0].name = "General";
     
-    for (int i = 1; i <= numberOfPlayers; ++i)
+    for (int i = 1; i < numberOfPlayers; ++i)
     {
         cout << "What is the name of player " << i << "?" << endl;
         cin >> temp;
