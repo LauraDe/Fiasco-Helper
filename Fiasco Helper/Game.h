@@ -38,21 +38,29 @@ public:
     void Aftermath();
     
 protected:
-        Game(int numberOfPlayers);
+    Game(int numberOfPlayers);
+    
     //all games have at least three players, the games with more players will add them during construction
     vector<Player> Players;
-   
+    
+    int numbersAvailable[6]; //use in the setup and the tilt
+    
+    //methods used by Setup();
+    void assignNonRelationshipElement(GameElement element, int playerNumber);
+    void assignRelationship(Relationship, int player1, int player2);
+    void SetupMenuOfAvailableGameElements();
+    
+    void rollAvailableDice(); //rolled during the setup, tilt, and aftermath
+    
 private:
     Dice d6; // the die that gets rolled all of the time
     
-    
     // the benefits of
-    int lightDice[6] = {0,0,0,0,0,0}; // will use 4, 5, or 6 spaces of the array
-    int darkDice[6] = {0,0,0,0,0,0}; // same as light dice, but dark
+    vector<int> lightDice; // will use 4, 5, or 6 spaces of the array
+    vector<int> darkDice; // same as light dice, but dark
     
     Playset playset1;
-    int numbersAvailable[6]; //use in the setup and the tilt
-    
+
 
     
     //used in the setup to ensure all needed game elements are chosen first
@@ -60,16 +68,6 @@ private:
     bool NeedChosen = false;
     bool LocationChosen = false;
     bool ObjectChosen = false;
-    
-    //methods used by Setup();
-    void assignNonRelationshipElement(GameElement element, int playerNumber);
-    void assignRelationship(Relationship, int player1, int player2);
-    void SetupMenuOfAvailableGameElements();
-    
-    
-    
-    void rollAvailableDice(); //rolled during the setup, tilt, and aftermath
-    
     
 };
 

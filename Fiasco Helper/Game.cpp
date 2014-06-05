@@ -28,10 +28,13 @@
 Game::Game(int numberOfPlayers)
 {
     this -> numberOfPlayers = numberOfPlayers;
+    
+    lightDice.resize(this -> numberOfPlayers +1);
+    darkDice.resize(this -> numberOfPlayers +1);
     lightDice[0] = (this -> numberOfPlayers * 2);
     darkDice[0] = (this -> numberOfPlayers * 2);
     
-    Players.resize(numberOfPlayers +1);
+    Players.resize(this -> numberOfPlayers +1);
     string temp;
     Players[0].name = "General";
     
@@ -42,7 +45,7 @@ Game::Game(int numberOfPlayers)
         Players[i].name = temp;
     }
     
-    cout << "This game has " << Game::Players.size() << " (" << numberOfPlayers << ") players." << endl;
+    cout << "This game has " << Game::Players.size() -1 << " (" << numberOfPlayers << ") players." << endl;
     
 }
 
@@ -98,25 +101,35 @@ void Game::rollAvailableDice()
 
 void GameThreePlayer::Setup()
 {
-    void SetupMenuOfAvailableGameElements();
+    Game::rollAvailableDice();
+    Game::SetupMenuOfAvailableGameElements();
     cout << 3 << endl;
 }
 
 void GameFourPlayer::Setup()
 {
-    void SetupMenuOfAvailableGameElements();
+    Game::rollAvailableDice();
+    Game::SetupMenuOfAvailableGameElements();
     cout << 4 << endl;
 }
 
 void GameFivePlayer::Setup()
 {
-    void SetupMenuOfAvailableGameElements();
+    Game::rollAvailableDice();
+    Game::SetupMenuOfAvailableGameElements();
     cout << 5 << endl;
 }
 
 
 void Game::SetupMenuOfAvailableGameElements()
 {
+    cout << "called menu setup list" << endl;
+    for (int i = 0; i < 6; ++i)
+    {
+        cout << "There are " << numbersAvailable[i] << " dice available that rolled a " << i+1 << endl;
+    }
+    
+    
         for (int i = 0; i < 4; ++i)
         {
             switch (i)
@@ -142,15 +155,26 @@ void Game::SetupMenuOfAvailableGameElements()
             {
                 for (int k = 0; k < 7; ++ k)
                 {
+                    if (k != 0)
+                    {
+                        cout << k << " ";
+                    }
                     if (k == 0)
                     {
-                      cout << playset1.getItem(i, j, k).description << endl;
+                      cout << endl << playset1.getItem(i, j, k).description << endl;
                     }
-                    else if (Game::numbersAvailable[k] > 0)
+                    else if (Game::numbersAvailable[k-1] > 0) //k-1 because the arrays are offset. element '1' in the getItem call is based off of the number of dice left in element '0' in the numbersAvailable array.
                     {
                       cout << playset1.getItem(i, j, k).description << endl;
                     }
-                    
+                    //if it is the last die, all elements should be displayed
+                    else if (numbersAvailable[0] + numbersAvailable[1] +numbersAvailable[2] +numbersAvailable[3] + numbersAvailable[4] +numbersAvailable[5] == 1)
+                    {
+                        cout << playset1.getItem(i, j, k).description << endl; //breakpoint here so I can make sure that it is being called correctly
+                    }
+                    else{
+                        cout << "There are none of this element left" << endl;
+                    }
                 }//close for k
             }//close for j
         }//close for i

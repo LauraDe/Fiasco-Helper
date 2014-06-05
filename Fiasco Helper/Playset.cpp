@@ -8,6 +8,7 @@
 
 #include "Playset.h"
 
+//no parameter constructor helps the user choose a playset to load
 Playset::Playset()
 {
     int choice = 0; //initialized so it can be checked the first time
@@ -71,12 +72,14 @@ Playset::Playset()
 
 }
 
+//if the constructor is passed a filename, it will load that file
 Playset::Playset(string filename)
 {
     this -> filename = filename;
     load();
 }
 
+//displays the author, copyright information, and a brief overview of the playset
 void Playset::loadBasicSetInfo(int choice)
 {
     string NameOfFile = filename;
