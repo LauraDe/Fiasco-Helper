@@ -9,6 +9,11 @@
 /* Begin PBXBuildFile section */
 		87AB5694193D3429007D6CF2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87AB5693193D3429007D6CF2 /* main.cpp */; };
 		87AB5696193D3429007D6CF2 /* Fiasco_Helper.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 87AB5695193D3429007D6CF2 /* Fiasco_Helper.1 */; };
+		87AB569E193D3459007D6CF2 /* Game.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87AB569C193D3459007D6CF2 /* Game.cpp */; };
+		87AB56A2193D3596007D6CF2 /* Dice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87AB56A0193D3596007D6CF2 /* Dice.cpp */; };
+		87AB56A5193D3D4C007D6CF2 /* Playset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87AB56A3193D3D4C007D6CF2 /* Playset.cpp */; };
+		87AB56A8193D3E9A007D6CF2 /* GameElement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87AB56A6193D3E9A007D6CF2 /* GameElement.cpp */; };
+		87F4C929193FFD3600CBB824 /* Player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87F4C927193FFD3600CBB824 /* Player.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -28,6 +33,23 @@
 		87AB5690193D3429007D6CF2 /* Fiasco Helper */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Fiasco Helper"; sourceTree = BUILT_PRODUCTS_DIR; };
 		87AB5693193D3429007D6CF2 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		87AB5695193D3429007D6CF2 /* Fiasco_Helper.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = Fiasco_Helper.1; sourceTree = "<group>"; };
+		87AB569C193D3459007D6CF2 /* Game.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Game.cpp; sourceTree = "<group>"; };
+		87AB569D193D3459007D6CF2 /* Game.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Game.h; sourceTree = "<group>"; };
+		87AB569F193D34AE007D6CF2 /* Playset */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Playset; sourceTree = "<group>"; };
+		87AB56A0193D3596007D6CF2 /* Dice.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Dice.cpp; sourceTree = "<group>"; };
+		87AB56A1193D3596007D6CF2 /* Dice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Dice.h; sourceTree = "<group>"; };
+		87AB56A3193D3D4C007D6CF2 /* Playset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Playset.cpp; sourceTree = "<group>"; };
+		87AB56A4193D3D4C007D6CF2 /* Playset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Playset.h; sourceTree = "<group>"; };
+		87AB56A6193D3E9A007D6CF2 /* GameElement.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameElement.cpp; sourceTree = "<group>"; };
+		87AB56A7193D3E9A007D6CF2 /* GameElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameElement.h; sourceTree = "<group>"; };
+		87AB56B1193E50C8007D6CF2 /* Action_6.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Action_6.txt; sourceTree = "<group>"; };
+		87AB56B2193E50C8007D6CF2 /* No_Strings_Attached.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = No_Strings_Attached.txt; sourceTree = "<group>"; };
+		87AB56B4193E50C8007D6CF2 /* cn01_news_channel_six.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = cn01_news_channel_six.pdf; sourceTree = "<group>"; };
+		87AB56B5193E50C8007D6CF2 /* NoStringsAttached.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = NoStringsAttached.pdf; sourceTree = "<group>"; };
+		87AB56B6193E50C8007D6CF2 /* Pipe-weed - A Fiasco Playset.webarchive */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = "Pipe-weed - A Fiasco Playset.webarchive"; sourceTree = "<group>"; };
+		87AB56B7193E50C8007D6CF2 /* Pipe_Weed.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Pipe_Weed.txt; sourceTree = "<group>"; };
+		87F4C927193FFD3600CBB824 /* Player.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Player.cpp; sourceTree = "<group>"; };
+		87F4C928193FFD3600CBB824 /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Player.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -44,6 +66,7 @@
 		87AB5687193D3429007D6CF2 = {
 			isa = PBXGroup;
 			children = (
+				87AB56B0193E50C8007D6CF2 /* Resources */,
 				87AB5692193D3429007D6CF2 /* Fiasco Helper */,
 				87AB5691193D3429007D6CF2 /* Products */,
 			);
@@ -61,9 +84,41 @@
 			isa = PBXGroup;
 			children = (
 				87AB5693193D3429007D6CF2 /* main.cpp */,
+				87AB569C193D3459007D6CF2 /* Game.cpp */,
+				87AB56A3193D3D4C007D6CF2 /* Playset.cpp */,
+				87AB56A4193D3D4C007D6CF2 /* Playset.h */,
+				87AB56A6193D3E9A007D6CF2 /* GameElement.cpp */,
+				87AB56A7193D3E9A007D6CF2 /* GameElement.h */,
+				87AB569D193D3459007D6CF2 /* Game.h */,
+				87F4C927193FFD3600CBB824 /* Player.cpp */,
+				87F4C928193FFD3600CBB824 /* Player.h */,
+				87AB56A0193D3596007D6CF2 /* Dice.cpp */,
+				87AB56A1193D3596007D6CF2 /* Dice.h */,
+				87AB569F193D34AE007D6CF2 /* Playset */,
 				87AB5695193D3429007D6CF2 /* Fiasco_Helper.1 */,
 			);
 			path = "Fiasco Helper";
+			sourceTree = "<group>";
+		};
+		87AB56B0193E50C8007D6CF2 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				87AB56B1193E50C8007D6CF2 /* Action_6.txt */,
+				87AB56B2193E50C8007D6CF2 /* No_Strings_Attached.txt */,
+				87AB56B3193E50C8007D6CF2 /* non txts */,
+				87AB56B7193E50C8007D6CF2 /* Pipe_Weed.txt */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		87AB56B3193E50C8007D6CF2 /* non txts */ = {
+			isa = PBXGroup;
+			children = (
+				87AB56B4193E50C8007D6CF2 /* cn01_news_channel_six.pdf */,
+				87AB56B5193E50C8007D6CF2 /* NoStringsAttached.pdf */,
+				87AB56B6193E50C8007D6CF2 /* Pipe-weed - A Fiasco Playset.webarchive */,
+			);
+			path = "non txts";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -117,7 +172,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				87AB56A2193D3596007D6CF2 /* Dice.cpp in Sources */,
 				87AB5694193D3429007D6CF2 /* main.cpp in Sources */,
+				87F4C929193FFD3600CBB824 /* Player.cpp in Sources */,
+				87AB56A5193D3D4C007D6CF2 /* Playset.cpp in Sources */,
+				87AB569E193D3459007D6CF2 /* Game.cpp in Sources */,
+				87AB56A8193D3E9A007D6CF2 /* GameElement.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -227,6 +287,7 @@
 				87AB569B193D3429007D6CF2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
