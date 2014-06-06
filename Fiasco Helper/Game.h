@@ -52,7 +52,7 @@ protected:
     void assignRelationship(Relationship r1, int player1, int player2);
     void SetupMenuOfAvailableGameElements();
     void SelectElements();
-    
+    int cinInt(int upperLimit, int lowerLimit, string errorMessage); //used for reading in integers, sanitizing the input to prevent strings or characters from being read into an integer variable
     
     void rollAvailableDice(); //rolled during the setup, tilt, and aftermath
     

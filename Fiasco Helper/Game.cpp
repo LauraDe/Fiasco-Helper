@@ -17,14 +17,11 @@
  void Aftermath();
  
 ;
-
- 
  
  NOTES:
  The playset is loaded into the arrays of game elements BEFORE the Game constructor is called.
  
  */
-
 
 //initializes the dice vectors, the vector of players, and the player names
 //NOTE: the constructor is called AFTER a playset is chosen
@@ -105,6 +102,20 @@ Relationship Game::getPlaysetRelationship(int j, int k)
     return playset1.getRelationship(j, k);
 }
 
+int Game::cinInt(int upperLimit, int lowerLimit, string errorMessage)
+{
+    int temp;
+    while ( (!(cin >> temp)) || temp < lowerLimit || temp > upperLimit)
+    {
+        cin.clear();
+        cin.ignore(INT_MAX,'\n');
+        cout << errorMessage << endl;
+        continue;
+    }
+    return temp;
+}
+
+
 //setup is different based on the number of players
 /*
  setup should:
@@ -157,23 +168,14 @@ void Game::SelectElements()
         Game::SetupMenuOfAvailableGameElements();
         cout << "What type of element would you like to add?" << endl;
         cout << "0) Relationship\n" << "1) Need\n" << "2) Location\n" << "3) Object" << endl;
-        while ( (!(cin >> elementType)) || elementType < 0 || elementType > 3)
-        {
-            cin.clear();
-            cin.ignore(INT_MAX,'\n');
-            cout << "Wrong format \n";
-            continue;
-        }
+        
+        elementType = cinInt(3, 0, "Wrong format");
+        
         
         cout << "What is the number of the subcategory? " << "ex: " << getPlaysetItem(elementType, 2, 0).description << " is subcategory number 3" << endl;
         
-        while ( (!(cin >> subcategory)) || subcategory < 1 || subcategory > 6)
-        {
-            cin.clear();
-            cin.ignore(INT_MAX,'\n');
-            cout << "Invalid choice. If you dislike your element choice from the choice before this, you can clear your selection after thhis menu set finishes \n";
-            continue;
-        }
+        subcategory = cinInt(6, 1, "Invalid choice. If you dislike your element choice from the choice before this, you can clear your selection after thhis menu set finishes");
+        
         subcategory -= 1; //adjust for the fact that people count from 1 and computers count from 0
         
         cout << "Which element within this subcategory would you like to choose?" << endl;
@@ -184,27 +186,13 @@ void Game::SelectElements()
                 cout << i+1 << ") " << getPlaysetItem(elementType, subcategory, i).description << endl;
             }
         }
-        
-        while ( (!(cin >> elementNumber)) || elementNumber < 1 || elementNumber > 6)
-        {
-            cin.clear();
-            cin.ignore(INT_MAX,'\n');
-            cout << "Invalid Choice. If you dislike your previous selection, you can clear it at the end of this menu set. \n";
-            continue;
-        }
-        elementNumber -= 1;
+        elementNumber = cinInt(6, 1, "Invalid Choice. If you dislike your previous selection, you can clear it at the end of this menu set.");
+        elementNumber -= 1; //adjust for the fact that people count from 1 and computers count from 0
     
     cout << "Do you wish choose the element " << getPlaysetItem(elementType, subcategory, elementNumber).description << endl;
     cout << "1) yes\n2) no" << endl;
-    while ( (!(cin >> choice)) || choice < 1 || choice > 2)
-    {
-        cin.clear();
-        cin.ignore(INT_MAX,'\n');
-        cout << "Invalid Choice.\n";
-        continue;
-    }
         
-    
+    choice = cinInt(2, 1, "Invalid Choice");
         
     
     if (choice == 1)
@@ -221,13 +209,7 @@ void Game::SelectElements()
                 cout << Players[i].nameCharacter << " is player number " << i << endl;
             }
             
-            while ( (!(cin >> player1)) || player1 < 0 || player1 > numberOfPlayers)
-            {
-                cin.clear();
-                cin.ignore(INT_MAX,'\n');
-                cout << "Invalid Choice.\n";
-                continue;
-            }
+            player1 = cinInt(numberOfPlayers, 0, "Invalid Choice");
             
             
             //assing the element
@@ -243,14 +225,11 @@ void Game::SelectElements()
             {
                 cout << Players[i].nameCharacter << " is player number " << i << endl;
             }
-            while ( (!(cin >> player1)) || player1 < 0 || player1 > numberOfPlayers)
-            {
-                cin.clear();
-                cin.ignore(INT_MAX,'\n');
-                cout << "Invalid Choice.\n";
-                continue;
-            }
+            
+            player1 = cinInt(6, 0, "Invalid Choice");
+            
             cout << "Now pick the second player in the relationship." << endl;
+            //can't replace with cinInt because it also needs to not equal player 1.
             while ( (!(cin >> player2)) || player2 < 0 || player2 > numberOfPlayers || player1 == player2)
             {
                 cin.clear();
@@ -409,7 +388,6 @@ void Game::assignNonRelationshipElement(GameElement element, int playerNumber)
     
     //add the generated line describing the game element to the player's array of game elements that affect them.
     Players[playerNumber].GameElementDescriptions.push_back(temp);
-    
-    
+  
 }
 
