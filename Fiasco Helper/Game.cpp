@@ -193,8 +193,42 @@ void Game::SetupMenuOfAvailableGameElements()
 void Game::assignNonRelationshipElement(GameElement element, int playerNumber)
 {
     assert(playerNumber > 0 && playerNumber <= Game::numberOfPlayers); //make sure that the number of players is valid
+    assert(element.type >= 1 && element.type <=3); //make sure that type is valid, type 0 is a relationship
+
     string temp;
-    temp = " ";
+   
+    if (playerNumber != 0)
+    {
+        switch (element.type)
+        {
+            case 1:
+                temp = Players[playerNumber].nameCharacter + " has a " + "Need " + element.category.substr(2, element.category.size() -2) + element.description;
+                break;
+            case 2:
+                temp = Players[playerNumber].nameCharacter + " has a " + "Location " + element.category.substr(2, element.category.size() -2) + element.description;
+                break;
+            case 3:
+                temp = Players[playerNumber].nameCharacter + " has a " + element.category.substr(2, element.   category.size() -2) + " Object: " + element.description;
+                break;
+        }//close switch
+    }//close if
+    else
+    {
+        switch (element.type)
+        {
+            case 1:
+                temp = " There is a general Need " + element.category.substr(2, element.category.size() -2) + element.description;
+                break;
+            case 2:
+                temp = " There is a general Location " + element.category.substr(2, element.category.size() -2) + element.description;
+                break;
+            case 3:
+                temp = "There is a general" + element.category.substr(2, element.   category.size() -2) + " Object: " + element.description;
+                break;
+        }//close switch
+    }//close else
+    
+    //add the generated line describing the game element to the player's array of game elements that affect them.
     Players[playerNumber].GameElementDescriptions.push_back(temp);
     
     
