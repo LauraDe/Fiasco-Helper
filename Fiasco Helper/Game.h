@@ -47,7 +47,7 @@ protected:
     
     //methods used by Setup();
     void assignNonRelationshipElement(GameElement element, int playerNumber);
-    void assignRelationship(Relationship, int player1, int player2);
+    void assignRelationship(Relationship r1, int player1, int player2);
     void SetupMenuOfAvailableGameElements();
     
     void rollAvailableDice(); //rolled during the setup, tilt, and aftermath

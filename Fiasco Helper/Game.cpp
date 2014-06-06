@@ -17,7 +17,7 @@
  void Aftermath();
  
 ;
- void assignRelationship(Relationship, int player1, int player2);
+
  
  
  NOTES:
@@ -189,10 +189,37 @@ void Game::SetupMenuOfAvailableGameElements()
         }//close for i
 }
 
-
+void Game::assignRelationship(Relationship r1, int player1, int player2)
+{
+    assert(player1 > 0 && player1 <= Game::numberOfPlayers); //make sure that the number of players is valid
+    assert(player2 > 0 && player2 <= Game::numberOfPlayers); //make sure that the number of players is valid
+    string temp;
+    
+    if (r1.hasDirection == true)
+    {
+        //SAMPLE: Eldonar is the admirer in a romantic relationship of admirer and admired with Joseph
+        temp = Players[player1].nameCharacter + " is the " + r1.description1 + " in a " + r1.category.substr(2, r1.category.size() -2)+ " relationship  of "+ r1.description + " with " + Players[player2].nameCharacter;
+        Players[player1].GameElementDescriptions.push_back(temp);
+        
+        
+        //SAMPLE: Joseph is the admired in a romantic relationship of admirer and admired with Eldonar.
+        temp = Players[player2].nameCharacter + " is the " + r1.description2 + " in a " + r1.category.substr(2, r1.category.size() -2)+ " relationship  of "+ r1.description + " with " + Players[player1].nameCharacter;
+        Players[player1].GameElementDescriptions.push_back(temp);
+        
+    }
+    else
+    {
+        temp = Players[player1].nameCharacter + " has a " + r1.category.substr(2, r1.category.size() -2)+ " relationship  of "+ r1.description + " with " + Players[player2].nameCharacter;
+        Players[player1].GameElementDescriptions.push_back(temp);
+        
+        temp = Players[player2].nameCharacter + " has a " + r1.category.substr(2, r1.category.size() -2)+ " relationship  of "+ r1.description + " with " + Players[player1].nameCharacter;
+        Players[player2].GameElementDescriptions.push_back(temp);
+    }
+    
+}
 void Game::assignNonRelationshipElement(GameElement element, int playerNumber)
 {
-    assert(playerNumber > 0 && playerNumber <= Game::numberOfPlayers); //make sure that the number of players is valid
+    assert(playerNumber >= 0 && playerNumber <= Game::numberOfPlayers); //make sure that the number of players is valid, player number 0 is the 'general' or 'unassigned' elements that apply to all players. they are stored in a player object for general game elements.
     assert(element.type >= 1 && element.type <=3); //make sure that type is valid, type 0 is a relationship
 
     string temp;
