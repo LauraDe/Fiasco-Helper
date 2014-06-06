@@ -42,7 +42,8 @@ private:
     
 public:
 
-    GameElement& getItem (int a, int b, int c); // a is the type identifier, 
+    GameElement& getItem (int a, int b, int c); // a is the type identifier,
+    Relationship& getRelationship (int b, int c);
     Playset();
     Playset(string filename);
 };

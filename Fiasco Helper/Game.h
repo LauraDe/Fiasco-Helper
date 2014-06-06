@@ -45,13 +45,19 @@ protected:
     
     int numbersAvailable[6]; //use in the setup and the tilt, keeps track of how many 1s, 2s, 3s, 4s, 5s, and 6s have been rolled and are available to be used.
     
+    int totalNumbersAvailable();
+    
     //methods used by Setup();
     void assignNonRelationshipElement(GameElement element, int playerNumber);
     void assignRelationship(Relationship r1, int player1, int player2);
     void SetupMenuOfAvailableGameElements();
+    void SelectElements();
+    
     
     void rollAvailableDice(); //rolled during the setup, tilt, and aftermath
     
+    GameElement getPlaysetItem(int i, int j, int k);
+    Relationship getPlaysetRelationship(int j, int k);
 private:
     Dice d6; // the die that gets rolled all of the time
     

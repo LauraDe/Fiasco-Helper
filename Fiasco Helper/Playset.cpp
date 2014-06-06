@@ -182,7 +182,7 @@ void Playset::load()
                     {
                         case 0:
                             playsetItemsRelationships[j][k].description = temporary[count];
-                            
+                            playsetItemsRelationships[j][k].type = 0;
                             //if the element is not a relationship, but rather the category for a set of relationships,
                             if (k == 0)
                             {
@@ -206,12 +206,44 @@ void Playset::load()
                             break;
                         case 1:
                             playsetItemsNeeds[j][k].description = temporary[count];
+                            playsetItemsNeeds[j][k].type = 1;
+                            
+                            if (k == 0)
+                            {
+                                playsetItemsNeeds[j][k].category = "Need";
+                            }
+                            
+                            else
+                            {
+                                playsetItemsNeeds[j][k].category = playsetItemsNeeds[j][0].description;
+                            }
                             break;
                         case 2:
                             playsetItemsLocations[j][k].description = temporary[count];
+                            playsetItemsLocations[j][k].type = 2;
+                            if (k == 0)
+                            {
+                                playsetItemsLocations[j][k].category = "Location";
+                            }
+                            
+                            else
+                            {
+                                playsetItemsLocations[j][k].category = playsetItemsLocations[j][0].description;
+                            }
                             break;
                         case 3:
                             playsetItemsObjects[j][k].description = temporary[count];
+                            playsetItemsObjects[j][k].type = 3;
+                            if (k == 0)
+                            {
+                                playsetItemsObjects[j][k].category = "Object";
+                            }
+                            
+                            else
+                            {
+                                playsetItemsObjects[j][k].category = playsetItemsObjects[j][0].description;
+                            }
+                            
                             break;
                         default:
                             cout << "got to default case loading playset. error" << endl;
@@ -227,6 +259,11 @@ void Playset::load()
     
     fin.close();
     return;
+}
+
+Relationship& Playset::getRelationship (int b, int c)
+{
+    return playsetItemsRelationships[b][c];
 }
 
 //treats this like an array
