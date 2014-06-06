@@ -43,7 +43,7 @@ protected:
     //all games have at least three players, the games with more players will add them during construction
     vector<Player> Players;
     
-    int numbersAvailable[6]; //use in the setup and the tilt
+    int numbersAvailable[6]; //use in the setup and the tilt, keeps track of how many 1s, 2s, 3s, 4s, 5s, and 6s have been rolled and are available to be used.
     
     //methods used by Setup();
     void assignNonRelationshipElement(GameElement element, int playerNumber);

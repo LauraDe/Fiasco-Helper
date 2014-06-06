@@ -18,7 +18,8 @@ class Player
 {
 private:
 public:
-    string name;
+    string nameReal;
+    string nameCharacter;
     vector<string> GameElementDescriptions; //the game elements themselves are not needed, only the line of description for how it applies to this player matters.
     
 };

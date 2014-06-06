@@ -25,6 +25,9 @@
  
  */
 
+
+//initializes the dice vectors, the vector of players, and the player names
+//NOTE: the constructor is called AFTER a playset is chosen
 Game::Game(int numberOfPlayers)
 {
     this -> numberOfPlayers = numberOfPlayers;
@@ -36,20 +39,23 @@ Game::Game(int numberOfPlayers)
     
     Players.resize(this -> numberOfPlayers +1);
     string temp;
-    Players[0].name = "General";
-    
+    Players[0].nameReal = "Unassigned";
+    Players[0].nameCharacter = "General";
     for (int i = 1; i <= numberOfPlayers; ++i)
     {
-        cout << "What is the name of player " << i << "?" << endl;
+        cout << "Who is player " << i << "?" << endl;
         cin >> temp;
-        Players[i].name = temp;
+        Players[i].nameReal = temp;
+        cout << "And what is their character name?" << endl;
+        cin >> temp;
+        Players[i].nameCharacter = temp;
     }
     
     cout << "This game has " << Game::Players.size() -1 << " (" << numberOfPlayers << ") players." << endl;
     
 }
 
-//constructors to properly set the number of players
+//constructors for each subclass call the parent class constructor with an integer referring to their number of players
 GameThreePlayer::GameThreePlayer() : Game(3)
 {
 }
@@ -61,6 +67,7 @@ GameFivePlayer::GameFivePlayer() : Game(5)
 }
 
 
+//rolls the available dice, and tallies the results in an array
 void Game::rollAvailableDice()
 {
     int temp; //stores the result of each roll so it can be counted
@@ -71,7 +78,7 @@ void Game::rollAvailableDice()
         Game::numbersAvailable[i] = 0;
     }
     
-    //rolls all unassigned dice, and tallies the results in the numbersAvailable array
+    //rolls all unassigned dice, and tallies the results (number of each # 1-6 rolled) in the numbersAvailable array
     for (int i = 0; i < (Game::lightDice[0] + Game::darkDice[0]); ++i)
     {
         temp = d6.roll();
@@ -120,7 +127,7 @@ void GameFivePlayer::Setup()
     cout << 5 << endl;
 }
 
-
+//displays the elements of the set that can be selected based on the dice that are left.
 void Game::SetupMenuOfAvailableGameElements()
 {
     cout << "called menu setup list" << endl;
@@ -159,6 +166,8 @@ void Game::SetupMenuOfAvailableGameElements()
                     {
                         cout << k << " ";
                     }
+                    
+                    
                     if (k == 0)
                     {
                       cout << endl << playset1.getItem(i, j, k).description << endl;
@@ -184,7 +193,9 @@ void Game::SetupMenuOfAvailableGameElements()
 void Game::assignNonRelationshipElement(GameElement element, int playerNumber)
 {
     assert(playerNumber > 0 && playerNumber <= Game::numberOfPlayers); //make sure that the number of players is valid
-    
+    string temp;
+    temp = " ";
+    Players[playerNumber].GameElementDescriptions.push_back(temp);
     
     
 }

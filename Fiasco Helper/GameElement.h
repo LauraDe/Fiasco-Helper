@@ -18,6 +18,7 @@ class GameElement
 {
 public:
     string description;
+    string category;
     int type; // 0 is relationship, 1 is need, 2 is object, 3 is location
     bool usedInSetup = false; //to check if it has been used during setup
 };

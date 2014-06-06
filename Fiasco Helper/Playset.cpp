@@ -183,6 +183,17 @@ void Playset::load()
                         case 0:
                             playsetItemsRelationships[j][k].description = temporary[count];
                             
+                            //if the element is not a relationship, but rather the category for a set of relationships,
+                            if (k == 0)
+                            {
+                            playsetItemsRelationships[j][k].category = "Relationship";
+                            }
+                            
+                            else
+                            {
+                                playsetItemsRelationships[j][k].category = playsetItemsRelationships[j][0].description;
+                            }
+                            
                             position = playsetItemsRelationships[j][k].description.find(" and ");
                             
                             //if the relationship has a direction (contains " and " as part of the string), then set description 1 as the first role, and description 2 as the second role
