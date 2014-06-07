@@ -452,12 +452,12 @@ bool GameFourPlayer::AllNeededElementsChosen()
         temp = false;
     }
     //here starts where this method is different for the game because of the number of players
-    if (relationship34Chosen == false)
+    if (Relationship34Chosen == false)
     {
         cout << "Still need a relationship between " << Players[3].nameCharacter << " and " << Players[4].nameCharacter << endl;
         temp = false;
     }
-    if (relationship14Chosen == false)
+    if (Relationship14Chosen == false)
     {
         cout << "Still need a relationship between " << Players[1].nameCharacter << " and " << Players[4].nameCharacter << endl;
         temp = false;
@@ -491,17 +491,17 @@ bool GameFivePlayer::AllNeededElementsChosen()
         temp = false;
     }
     //here starts where this method is different for the game because of the number of players
-    if (relationship34Chosen == false)
+    if (Relationship34Chosen == false)
     {
         cout << "Still need a relationship between " << Players[3].nameCharacter << " and " << Players[4].nameCharacter << endl;
         temp = false;
     }
-    if (relationship45Chosen == false)
+    if (Relationship45Chosen == false)
     {
         cout << "Still need a relationship between " << Players[4].nameCharacter << " and " << Players[5].nameCharacter << endl;
         temp = false;
     }
-    if (relationship15Chosen == false)
+    if (Relationship15Chosen == false)
     {
         cout << "Still need a relationship between " << Players[1].nameCharacter << " and " << Players[5].nameCharacter << endl;
         temp = false;
@@ -510,4 +510,126 @@ bool GameFivePlayer::AllNeededElementsChosen()
     return temp;
 }
 
+bool GameThreePlayer::IsNeededUnchosenElement(GameElement element, int player1, int player2)
+{
+    bool temp = false;
+    
+    if (element.type == 1 && NeedChosen == false)
+    {
+        temp = true;
+    }
+    if (element.type == 2 && LocationChosen == false)
+    {
+        temp = true;
+    }
+    if (element.type == 3 && ObjectChosen == false)
+    {
+        temp = true;
+    }
+    //here starts where this method is different for the game because of the number of players
+    
+    if (element.type == 0)
+    {
+        if ( ( (player1 == 1 && player2 == 2) || (player2 == 1 && player1 == 2) ) && Relationship12Chosen == false)
+        {
+            temp = true;
+        }
+        if ( ( (player1 == 2 && player2 == 3) || (player2 == 2 && player1 == 3) ) && Relationship23Chosen == false)
+        {
+            temp = true;
+        }
+        if ( ( (player1 == 1 && player2 == 3) || (player2 == 1 && player1 == 3) ) && Relationship13Chosen == false)
+        {
+            temp = true;
+        }
+        
+    }
+    
+    return temp;
+}
 
+bool GameFourPlayer::IsNeededUnchosenElement(GameElement element, int player1, int player2)
+{
+    bool temp = false;
+    
+    if (element.type == 1 && NeedChosen == false)
+    {
+        temp = true;
+    }
+    if (element.type == 2 && LocationChosen == false)
+    {
+        temp = true;
+    }
+    if (element.type == 3 && ObjectChosen == false)
+    {
+        temp = true;
+    }
+    //here starts where this method is different for the game because of the number of players
+    if (element.type == 0)
+    {
+        if ( ( (player1 == 1 && player2 == 2) || (player2 == 1 && player1 == 2) ) && Relationship12Chosen == false)
+        {
+            temp = true;
+        }
+        if ( ( (player1 == 2 && player2 == 3) || (player2 == 2 && player1 == 3) ) && Relationship23Chosen == false)
+        {
+            temp = true;
+        }
+        if ( ( (player1 == 3 && player2 == 4) || (player2 == 3 && player1 == 4) ) && Relationship34Chosen == false)
+        {
+            temp = true;
+        }
+        if ( ( (player1 == 1 && player2 == 4) || (player2 == 1 && player1 == 4) ) && Relationship14Chosen == false)
+        {
+            temp = true;
+        }
+        
+    }
+    
+    return temp;
+}
+
+bool GameFivePlayer::IsNeededUnchosenElement(GameElement element, int player1, int player2)
+{
+    bool temp = false;
+    
+    if (element.type == 1 && NeedChosen == false)
+    {
+        temp = true;
+    }
+    if (element.type == 2 && LocationChosen == false)
+    {
+        temp = true;
+    }
+    if (element.type == 3 && ObjectChosen == false)
+    {
+        temp = true;
+    }
+    //here starts where this method is different for the game because of the number of players
+    if (element.type == 0)
+    {
+        if ( ((player1 == 1 && player2 == 2) || (player2 == 1 && player1 == 2)) && Relationship12Chosen == false)
+        {
+            temp = true;
+        }
+        if ( ((player1 == 2 && player2 == 3) || (player2 == 2 && player1 == 3)) && Relationship23Chosen == false)
+        {
+            temp = true;
+        }
+        if ( ((player1 == 3 && player2 == 4) || (player2 == 3 && player1 == 4)) && Relationship34Chosen == false)
+        {
+            temp = true;
+        }
+        if ( ((player1 == 4 && player2 == 5) || (player2 == 4 && player1 == 5)) && Relationship45Chosen == false)
+        {
+            temp = true;
+        }
+        if ( ((player1 == 1 && player2 == 5) || (player2 == 1 && player1 == 5)) && Relationship15Chosen == false)
+        {
+            temp = true;
+        }
+        
+    }
+    
+    return temp;
+}

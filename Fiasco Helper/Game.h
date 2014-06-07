@@ -67,6 +67,7 @@ protected:
     //used in the setup to ensure all needed game elements are chosen first
     //still need to be implemented
     virtual bool AllNeededElementsChosen () = 0; // =0 because it is a purely virtual function
+    virtual bool IsNeededUnchosenElement(GameElement element, int player1 = 0, int player2 = 0) = 0;
     
     //UTILITY FUNCTIONS:
     void rollAvailableDice(); //rolled during the setup, tilt, and aftermath
@@ -92,6 +93,7 @@ public:
     void Setup();
     GameThreePlayer();
     bool AllNeededElementsChosen ();
+    bool IsNeededUnchosenElement(GameElement element, int player1 = 0, int player2 = 0);
 private:
     bool Relationship13Chosen = false;
 };
@@ -102,10 +104,11 @@ public:
     void Setup();
     GameFourPlayer();
     bool AllNeededElementsChosen ();
+    bool IsNeededUnchosenElement(GameElement element, int player1 = 0, int player2 = 0);
 private:
     Player player4;
-    bool relationship34Chosen = false;
-    bool relationship14Chosen = false;
+    bool Relationship34Chosen = false;
+    bool Relationship14Chosen = false;
     
 };
 
@@ -115,12 +118,13 @@ public:
     GameFivePlayer();
     void Setup();
     bool AllNeededElementsChosen ();
+    bool IsNeededUnchosenElement(GameElement element, int player1 = 0, int player2 = 0);
 private:
     Player player4;
     Player player5;
-    bool relationship34Chosen = false;
-    bool relationship45Chosen = false;
-    bool relationship15Chosen = false;
+    bool Relationship34Chosen = false;
+    bool Relationship45Chosen = false;
+    bool Relationship15Chosen = false;
     
 
 };
