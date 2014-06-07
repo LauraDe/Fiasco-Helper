@@ -67,6 +67,7 @@ protected:
     //used in the setup to ensure all needed game elements are chosen first
     //still need to be implemented
     virtual bool AllNeededElementsChosen () = 0; // =0 because it is a purely virtual function
+    virtual int NumberOfNeededElementsLeftToChoose() = 0; //very very similar to allNeededElementsChosen
     virtual bool IsNeededUnchosenElement(GameElement element, int player1 = 0, int player2 = 0) = 0;
     
     //UTILITY FUNCTIONS:
@@ -93,7 +94,9 @@ public:
     void Setup();
     GameThreePlayer();
     bool AllNeededElementsChosen ();
+    int NumberOfNeededElementsLeftToChoose() = 0;
     bool IsNeededUnchosenElement(GameElement element, int player1 = 0, int player2 = 0);
+    
 private:
     bool Relationship13Chosen = false;
 };
@@ -104,6 +107,7 @@ public:
     void Setup();
     GameFourPlayer();
     bool AllNeededElementsChosen ();
+    int NumberOfNeededElementsLeftToChoose() = 0;
     bool IsNeededUnchosenElement(GameElement element, int player1 = 0, int player2 = 0);
 private:
     Player player4;
@@ -118,6 +122,7 @@ public:
     GameFivePlayer();
     void Setup();
     bool AllNeededElementsChosen ();
+    int NumberOfNeededElementsLeftToChoose() = 0;
     bool IsNeededUnchosenElement(GameElement element, int player1 = 0, int player2 = 0);
 private:
     Player player4;

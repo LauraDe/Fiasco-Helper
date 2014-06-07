@@ -68,7 +68,7 @@ GameFivePlayer::GameFivePlayer() : Game(5)
  -count the number of dice in each number (kept in numbersAvailable[6])
  -display all game elements that can be chosen
  -prompt the user to choose and element, and to either assign it to a player or keep it 'general'
- -
+ -inform the user of required game elements, and check if an element would fulfill a still needed requirement.
  
  YAY! SETUP DOES ALL OF THESE THINGS NOW
  */
@@ -402,6 +402,11 @@ bool GameThreePlayer::AllNeededElementsChosen()
         cout << "Still need to choose a need" << endl;
         temp = false;
     }
+    if (LocationChosen == false)
+    {
+        cout << "Still need to choose a location" << endl;
+        temp = false;
+    }
     if (ObjectChosen == false)
     {
         cout << "Still need to choose an object" << endl;
@@ -434,6 +439,11 @@ bool GameFourPlayer::AllNeededElementsChosen()
     if (NeedChosen == false)
     {
         cout << "Still need to choose a need" << endl;
+        temp = false;
+    }
+    if (LocationChosen == false)
+    {
+        cout << "Still need to choose a location" << endl;
         temp = false;
     }
     if (ObjectChosen == false)
@@ -475,6 +485,13 @@ bool GameFivePlayer::AllNeededElementsChosen()
         cout << "Still need to choose a need" << endl;
         temp = false;
     }
+    
+    if (LocationChosen == false)
+    {
+        cout << "Still need to choose a location" << endl;
+        temp = false;
+    }
+
     if (ObjectChosen == false)
     {
         cout << "Still need to choose an object" << endl;
@@ -505,6 +522,138 @@ bool GameFivePlayer::AllNeededElementsChosen()
     {
         cout << "Still need a relationship between " << Players[1].nameCharacter << " and " << Players[5].nameCharacter << endl;
         temp = false;
+    }
+    
+    return temp;
+}
+
+int GameThreePlayer::NumberOfNeededElementsLeftToChoose()
+{
+    int temp;
+    temp = 0;
+    if (NeedChosen == false)
+    {
+        cout << "Still need to choose a need" << endl;
+        ++temp;
+    }
+    if (LocationChosen == false)
+    {
+        cout << "Still need to choose a location" << endl;
+        temp++;
+    }
+
+    if (ObjectChosen == false)
+    {
+        cout << "Still need to choose an object" << endl;
+        ++temp;
+    }
+    if (Relationship12Chosen == false)
+    {
+        cout << "Still need a relationship between " << Players[1].nameCharacter << " and " << Players[2].nameCharacter << endl;
+        ++temp;
+    }
+    if (Relationship23Chosen == false)
+    {
+        cout << "Still need a relationship between " << Players[2].nameCharacter << " and " << Players[3].nameCharacter << endl;
+        ++temp;
+    }
+    //here starts where this method is different for the game because of the number of players
+    if (Relationship13Chosen == false)
+    {
+        cout << "Still need a relationship between " << Players[1].nameCharacter << " and " << Players[3].nameCharacter << endl;
+        ++temp;
+    }
+    
+    return temp;
+}
+int GameFourPlayer::NumberOfNeededElementsLeftToChoose()
+{
+    int temp;
+    temp = true;
+    if (NeedChosen == false)
+    {
+        cout << "Still need to choose a need" << endl;
+        temp++;
+    }
+    if (LocationChosen == false)
+    {
+        cout << "Still need to choose a location" << endl;
+        temp++;
+    }
+
+    if (ObjectChosen == false)
+    {
+        cout << "Still need to choose an object" << endl;
+        temp++;
+    }
+    if (Relationship12Chosen == false)
+    {
+        cout << "Still need a relationship between " << Players[1].nameCharacter << " and " << Players[2].nameCharacter << endl;
+        temp++;
+    }
+    if (Relationship23Chosen == false)
+    {
+        cout << "Still need a relationship between " << Players[1].nameCharacter << " and " << Players[3].nameCharacter << endl;
+        temp++;
+    }
+    //here starts where this method is different for the game because of the number of players
+    if (Relationship34Chosen == false)
+    {
+        cout << "Still need a relationship between " << Players[3].nameCharacter << " and " << Players[4].nameCharacter << endl;
+        temp++;
+    }
+    if (Relationship14Chosen == false)
+    {
+        cout << "Still need a relationship between " << Players[1].nameCharacter << " and " << Players[4].nameCharacter << endl;
+        temp++;
+    }
+    
+    return temp;
+}
+int GameFivePlayer::NumberOfNeededElementsLeftToChoose()
+{
+    int temp;
+    temp = true;
+    if (NeedChosen == false)
+    {
+        cout << "Still need to choose a need" << endl;
+        temp++;
+    }
+    if (LocationChosen == false)
+    {
+        cout << "Still need to choose a location" << endl;
+        temp++;
+    }
+    if (ObjectChosen == false)
+    {
+        cout << "Still need to choose an object" << endl;
+        temp++;
+    }
+    if (Relationship12Chosen == false)
+    {
+        cout << "Still need a relationship between " << Players[1].nameCharacter << " and " << Players[2].nameCharacter << endl;
+        temp++;
+    }
+    if (Relationship23Chosen == false)
+    {
+        cout << "Still need a relationship between " << Players[1].nameCharacter << " and " << Players[3].nameCharacter << endl;
+        temp++;
+    }
+    //here starts where this method is different for the game because of the number of players
+    if (Relationship34Chosen == false)
+    {
+        cout << "Still need a relationship between " << Players[3].nameCharacter << " and " << Players[4].nameCharacter << endl;
+        temp++;
+    }
+    if (Relationship45Chosen == false)
+    {
+        cout << "Still need a relationship between " << Players[4].nameCharacter << " and " << Players[5].nameCharacter << endl;
+        temp++;
+    }
+    if (Relationship15Chosen == false)
+    {
+        cout << "Still need a relationship between " << Players[1].nameCharacter << " and " << Players[5].nameCharacter << endl;
+        temp++;
     }
     
     return temp;
