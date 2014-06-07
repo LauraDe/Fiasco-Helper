@@ -94,7 +94,7 @@ public:
     void Setup();
     GameThreePlayer();
     bool AllNeededElementsChosen ();
-    int NumberOfNeededElementsLeftToChoose() = 0;
+    int NumberOfNeededElementsLeftToChoose();
     bool IsNeededUnchosenElement(GameElement element, int player1 = 0, int player2 = 0);
     
 private:
@@ -107,7 +107,7 @@ public:
     void Setup();
     GameFourPlayer();
     bool AllNeededElementsChosen ();
-    int NumberOfNeededElementsLeftToChoose() = 0;
+    int NumberOfNeededElementsLeftToChoose();
     bool IsNeededUnchosenElement(GameElement element, int player1 = 0, int player2 = 0);
 private:
     Player player4;
@@ -122,7 +122,7 @@ public:
     GameFivePlayer();
     void Setup();
     bool AllNeededElementsChosen ();
-    int NumberOfNeededElementsLeftToChoose() = 0;
+    int NumberOfNeededElementsLeftToChoose();
     bool IsNeededUnchosenElement(GameElement element, int player1 = 0, int player2 = 0);
 private:
     Player player4;
