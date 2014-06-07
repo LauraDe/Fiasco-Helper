@@ -117,14 +117,13 @@ void Game::SelectElements()
         
         elementType = cinInt(3, 0, "Wrong format");
         
-        
         cout << "What is the number of the subcategory? " << endl;
         for (int i = 0; i < 6; ++i)
         {
             cout << getPlaysetItem(elementType, i, 0).description << endl;
         }
         
-        subcategory = cinInt(6, 1, "Invalid choice. If you dislike your element choice from the choice before this, you can clear your selection after thhis menu set finishes");
+        subcategory = cinInt(6, 1, "Invalid choice. If you dislike your element choice from the choice before this, you can clear your selection after this menu set finishes");
         
         subcategory -= 1; //adjust for the fact that people count from 1 and computers count from 0
         
@@ -139,36 +138,42 @@ void Game::SelectElements()
         elementNumber = cinInt(6, 1, "Invalid Choice. If you dislike your previous selection, you can clear it at the end of this menu set.");
         elementNumber -= 1; //adjust for the fact that people count from 1 and computers count from 0
         
+        //if the element is not a relationship, ask to confirm their choice.
+        if (getPlaysetItem(elementType, subcategory, elementNumber).type != 0)
+        {
         cout << "Do you wish choose the element " << getPlaysetItem(elementType, subcategory, elementNumber).description << endl;
         cout << "1) yes\n2) no" << endl;
-        
         choice = cinInt(2, 1, "Invalid Choice");
-        
-        
-        if (choice == 1)
-        {
-            // if they say "choose this element", use the die
-            numbersAvailable[elementNumber] -= 1;
             
-            if (elementType != 0)
+            //can skip this step if all of the needed elements have been chosen, or if they said no to the element
+            if (AllNeededElementsChosen() == false && choice != 2)
             {
-                cout << "Pick a player number to assign this element to. Enter 0 for a general element" << endl;
-                //list the player names
-                for (int i = 1; i <= numberOfPlayers; ++i)
+                //can skip this step if the element is an unchosen needed element
+                if (IsNeededUnchosenElement(getPlaysetItem(elementType, subcategory, elementNumber)) == false)
                 {
-                    cout << Players[i].nameCharacter << " is player number " << i << endl;
-                }
-                
-                player1 = cinInt(numberOfPlayers, 0, "Invalid Choice");
-                
-                
-                //assing the element
-                assignNonRelationshipElement(getPlaysetItem(elementType, subcategory, elementNumber), player1);
-                cout << Players[player1].GameElementDescriptions[Players[player1].GameElementDescriptions.size() -1] << endl;
-            }
+                    //if there are more dice left than elements needed, the user gets a warning and a second chance to rechoose their element
+                    if (NumberOfNeededElementsLeftToChoose() < totalNumbersAvailable())
+                    {
+                        cout << "There are still unchosen elements that need to be chosen. Are you sure that you want to choose this element, knowing that it will not fulfill any of the needed elements?" << endl;
+                        cout << "1) yes\n2) no" << endl;
+                        choice = cinInt(2, 1, "Invalid Choice");
+                    }
+                    else // otherwise, they are forced to rechoose
+                    {
+                        choice = 2;
+                        cout << "You cannot choose this element. You must choose a required element." << endl;
+                    }//close else
+                }//close (if is needed element)
+            }//close if (not all elements are chosen)
+        }//close if (not a relationship)
+        else{
+            cout << "Do you wish choose the element " << getPlaysetItem(elementType, subcategory, elementNumber).description << endl;
+            cout << "1) yes\n2) no" << endl;
+            choice = cinInt(2, 1, "Invalid Choice");
             
-            else
+            if (choice == 2)
             {
+                //selecting the players for the relationship has to happen before the element choice is confirmed, so it can be checked against available needed relationships
                 cout << "Pick the first player in this relationship. If the relationship has direction, this will be the player with the first half of the relationship" << endl;
                 //list the player names
                 for (int i = 1; i <= numberOfPlayers; ++i)
@@ -191,6 +196,57 @@ void Game::SelectElements()
                     }
                     continue;
                 }
+                
+                //can skip this step if all of the needed elements have been chosen
+                if (AllNeededElementsChosen() == false)
+                {
+                    //can skip this step if the element is an unchosen needed element
+                    if (IsNeededUnchosenElement(getPlaysetItem(elementType, subcategory, elementNumber), player1, player2) == false)
+                    {
+                        //if there are more dice left than elements needed, the user gets a warning and a second chance to rechoose their element
+                        if (NumberOfNeededElementsLeftToChoose() < totalNumbersAvailable())
+                        {
+                            cout << "There are still unchosen elements that need to be chosen. Are you sure that you want to choose this element, knowing that it will not fulfill any of the needed elements?" << endl;
+                            cout << "1) yes\n2) no" << endl;
+                            choice = cinInt(2, 1, "Invalid Choice");
+                        }
+                        else // otherwise, they are forced to rechoose
+                        {
+                            choice = 2;
+                            cout << "You cannot choose this element. You must choose a required element." << endl;
+                        }//close else
+                    }//close if is needed element
+                }//close if not all elements are chosen
+            }//close else
+        }//close if they said no to the choice
+        
+        if (choice == 1)
+        {
+            // if they say "choose this element", use the die
+            numbersAvailable[elementNumber] -= 1;
+            
+            if (elementType != 0)
+            {
+                cout << "Pick a player number to assign this element to. Enter 0 for a general element" << endl;
+                //list the player names
+                for (int i = 1; i <= numberOfPlayers; ++i)
+                {
+                    cout << Players[i].nameCharacter << " is player number " << i << endl;
+                }
+                
+                player1 = cinInt(numberOfPlayers, 0, "Invalid Choice");
+                
+                
+                //assing the element
+                assignNonRelationshipElement(getPlaysetItem(elementType, subcategory, elementNumber), player1);
+                cout << Players[player1].GameElementDescriptions[Players[player1].GameElementDescriptions.size() -1] << endl;
+            }
+            else
+            {
+                assert(player1 > 0 && player1 <= numberOfPlayers);
+                assert(player2 > 0 && player2 <= numberOfPlayers);
+                
+                //Xcode thinks that player1 and player2 could be uninitialized at this point. I do not agree with this, but have added assertations to confirm that player1 and player2 are both initialized and valid
                 assignRelationship(getPlaysetRelationship(subcategory, elementNumber), player1, player2);
             }
         }
@@ -331,68 +387,12 @@ void Game::assignNonRelationshipElement(GameElement element, int playerNumber)
     Players[playerNumber].GameElementDescriptions.push_back(temp);
     cout << temp << endl;
     cout << "enter anything to continue" << endl;
+    cin.ignore(INT_MAX);
+    cin.clear();
     getline (cin, temp);
 }
 
-
-
-//Utility functions
-//rolls the available dice, and tallies the results in an array, used in the setup, tilt, and aftermath
-void Game::rollAvailableDice()
-{
-    int temp; //stores the result of each roll so it can be counted
-    
-    //resets the array of numbers available
-    for (int i = 0; i < 6; ++i)
-    {
-        Game::numbersAvailable[i] = 0;
-    }
-    
-    //rolls all unassigned dice, and tallies the results (number of each # 1-6 rolled) in the numbersAvailable array
-    for (int i = 0; i < (Game::lightDice[0] + Game::darkDice[0]); ++i)
-    {
-        temp = d6.roll();
-        
-        if ( temp >= 1 && temp <= 6)
-        {
-            Game::numbersAvailable[temp-1] += 1;
-        }
-        else
-        {
-            cout << "Rolled a d6 and got a number that was not 1-6" << endl;
-        }
-    }
-}
-
-int Game::cinInt(int upperLimit, int lowerLimit, string errorMessage)
-{
-    int temp;
-    while ( (!(cin >> temp)) || temp < lowerLimit || temp > upperLimit)
-    {
-        cin.clear();
-        cin.ignore(INT_MAX,'\n');
-        cout << errorMessage << endl;
-        continue;
-    }
-    return temp;
-}
-
-GameElement Game::getPlaysetItem(int i, int j, int k)
-{
-    return playset1.getItem(i, j, k);
-}
-
-Relationship Game::getPlaysetRelationship(int j, int k)
-{
-    return playset1.getRelationship(j, k);
-}
-
-
-int Game::totalNumbersAvailable()
-{
-    return (numbersAvailable[0] + numbersAvailable[1] + numbersAvailable[2] + numbersAvailable[3] + numbersAvailable[4] + numbersAvailable[5]);
-}
-
+//returns true if all of the needed elements have been chosen
 bool GameThreePlayer::AllNeededElementsChosen()
 {
     bool temp;
@@ -431,7 +431,6 @@ bool GameThreePlayer::AllNeededElementsChosen()
     
     return temp;
 }
-
 bool GameFourPlayer::AllNeededElementsChosen()
 {
     bool temp;
@@ -475,7 +474,6 @@ bool GameFourPlayer::AllNeededElementsChosen()
     
     return temp;
 }
-
 bool GameFivePlayer::AllNeededElementsChosen()
 {
     bool temp;
@@ -491,7 +489,7 @@ bool GameFivePlayer::AllNeededElementsChosen()
         cout << "Still need to choose a location" << endl;
         temp = false;
     }
-
+    
     if (ObjectChosen == false)
     {
         cout << "Still need to choose an object" << endl;
@@ -527,6 +525,7 @@ bool GameFivePlayer::AllNeededElementsChosen()
     return temp;
 }
 
+//returns the number of needed elements that still need to be chosen
 int GameThreePlayer::NumberOfNeededElementsLeftToChoose()
 {
     int temp;
@@ -541,7 +540,7 @@ int GameThreePlayer::NumberOfNeededElementsLeftToChoose()
         cout << "Still need to choose a location" << endl;
         temp++;
     }
-
+    
     if (ObjectChosen == false)
     {
         cout << "Still need to choose an object" << endl;
@@ -580,7 +579,7 @@ int GameFourPlayer::NumberOfNeededElementsLeftToChoose()
         cout << "Still need to choose a location" << endl;
         temp++;
     }
-
+    
     if (ObjectChosen == false)
     {
         cout << "Still need to choose an object" << endl;
@@ -659,6 +658,7 @@ int GameFivePlayer::NumberOfNeededElementsLeftToChoose()
     return temp;
 }
 
+//checks if an element is a needed element that has not been chosen yet
 bool GameThreePlayer::IsNeededUnchosenElement(GameElement element, int player1, int player2)
 {
     bool temp = false;
@@ -696,7 +696,6 @@ bool GameThreePlayer::IsNeededUnchosenElement(GameElement element, int player1, 
     
     return temp;
 }
-
 bool GameFourPlayer::IsNeededUnchosenElement(GameElement element, int player1, int player2)
 {
     bool temp = false;
@@ -737,7 +736,6 @@ bool GameFourPlayer::IsNeededUnchosenElement(GameElement element, int player1, i
     
     return temp;
 }
-
 bool GameFivePlayer::IsNeededUnchosenElement(GameElement element, int player1, int player2)
 {
     bool temp = false;
@@ -782,3 +780,61 @@ bool GameFivePlayer::IsNeededUnchosenElement(GameElement element, int player1, i
     
     return temp;
 }
+
+
+//Utility functions
+//rolls the available dice, and tallies the results in an array, used in the setup, tilt, and aftermath
+void Game::rollAvailableDice()
+{
+    int temp; //stores the result of each roll so it can be counted
+    
+    //resets the array of numbers available
+    for (int i = 0; i < 6; ++i)
+    {
+        Game::numbersAvailable[i] = 0;
+    }
+    
+    //rolls all unassigned dice, and tallies the results (number of each # 1-6 rolled) in the numbersAvailable array
+    for (int i = 0; i < (Game::lightDice[0] + Game::darkDice[0]); ++i)
+    {
+        temp = d6.roll();
+        
+        if ( temp >= 1 && temp <= 6)
+        {
+            Game::numbersAvailable[temp-1] += 1;
+        }
+        else
+        {
+            cout << "Rolled a d6 and got a number that was not 1-6" << endl;
+        }
+    }
+}
+
+int Game::cinInt(int upperLimit, int lowerLimit, string errorMessage)
+{
+    int temp;
+    while ( (!(cin >> temp)) || temp < lowerLimit || temp > upperLimit)
+    {
+        cin.clear();
+        cin.ignore(INT_MAX,'\n');
+        cout << errorMessage << endl;
+        continue;
+    }
+    return temp;
+}
+
+GameElement Game::getPlaysetItem(int i, int j, int k)
+{
+    return playset1.getItem(i, j, k);
+}
+Relationship Game::getPlaysetRelationship(int j, int k)
+{
+    return playset1.getRelationship(j, k);
+}
+
+int Game::totalNumbersAvailable()
+{
+    return (numbersAvailable[0] + numbersAvailable[1] + numbersAvailable[2] + numbersAvailable[3] + numbersAvailable[4] + numbersAvailable[5]);
+}
+
+
