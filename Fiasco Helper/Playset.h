@@ -48,6 +48,4 @@ public:
     Playset(string filename);
 };
 
-
-
 #endif /* defined(__Fiasco_Helper__Playset__) */

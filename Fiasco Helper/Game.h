@@ -19,9 +19,6 @@
 
 using namespace std;
 
-//consider making subclasses of game for 3, 4, and 5 players
-
-
 class Game
 {
 
@@ -69,6 +66,7 @@ protected:
     virtual bool AllNeededElementsChosen () = 0; // =0 because it is a purely virtual function
     virtual int NumberOfNeededElementsLeftToChoose() = 0; //very very similar to allNeededElementsChosen
     virtual bool IsNeededUnchosenElement(GameElement element, int player1 = 0, int player2 = 0) = 0;
+    virtual void MarkNeededElementChosen(GameElement element, int player1 = 0, int player2 = 0) = 0;
     
     //UTILITY FUNCTIONS:
     void rollAvailableDice(); //rolled during the setup, tilt, and aftermath
@@ -96,7 +94,7 @@ public:
     bool AllNeededElementsChosen ();
     int NumberOfNeededElementsLeftToChoose();
     bool IsNeededUnchosenElement(GameElement element, int player1 = 0, int player2 = 0);
-    
+    void MarkNeededElementChosen(GameElement element, int player1 = 0, int player2 = 0);
 private:
     bool Relationship13Chosen = false;
 };
@@ -109,11 +107,12 @@ public:
     bool AllNeededElementsChosen ();
     int NumberOfNeededElementsLeftToChoose();
     bool IsNeededUnchosenElement(GameElement element, int player1 = 0, int player2 = 0);
+    void MarkNeededElementChosen(GameElement element, int player1 = 0, int player2 = 0);
+    
 private:
     Player player4;
     bool Relationship34Chosen = false;
     bool Relationship14Chosen = false;
-    
 };
 
 class GameFivePlayer : public Game
@@ -124,6 +123,7 @@ public:
     bool AllNeededElementsChosen ();
     int NumberOfNeededElementsLeftToChoose();
     bool IsNeededUnchosenElement(GameElement element, int player1 = 0, int player2 = 0);
+    void MarkNeededElementChosen(GameElement element, int player1 = 0, int player2 = 0);
 private:
     Player player4;
     Player player5;
@@ -131,9 +131,6 @@ private:
     bool Relationship45Chosen = false;
     bool Relationship15Chosen = false;
     
-
 };
-
-
 
 #endif /* defined(__Fiasco_Helper__Game__) */

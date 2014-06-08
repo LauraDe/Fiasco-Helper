@@ -12,7 +12,6 @@
 		87AB569E193D3459007D6CF2 /* Game.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87AB569C193D3459007D6CF2 /* Game.cpp */; };
 		87AB56A2193D3596007D6CF2 /* Dice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87AB56A0193D3596007D6CF2 /* Dice.cpp */; };
 		87AB56A5193D3D4C007D6CF2 /* Playset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87AB56A3193D3D4C007D6CF2 /* Playset.cpp */; };
-		87AB56A8193D3E9A007D6CF2 /* GameElement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87AB56A6193D3E9A007D6CF2 /* GameElement.cpp */; };
 		87F4C929193FFD3600CBB824 /* Player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87F4C927193FFD3600CBB824 /* Player.cpp */; };
 /* End PBXBuildFile section */
 
@@ -40,7 +39,6 @@
 		87AB56A1193D3596007D6CF2 /* Dice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Dice.h; sourceTree = "<group>"; };
 		87AB56A3193D3D4C007D6CF2 /* Playset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Playset.cpp; sourceTree = "<group>"; };
 		87AB56A4193D3D4C007D6CF2 /* Playset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Playset.h; sourceTree = "<group>"; };
-		87AB56A6193D3E9A007D6CF2 /* GameElement.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameElement.cpp; sourceTree = "<group>"; };
 		87AB56A7193D3E9A007D6CF2 /* GameElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameElement.h; sourceTree = "<group>"; };
 		87AB56B1193E50C8007D6CF2 /* Action_6.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Action_6.txt; sourceTree = "<group>"; };
 		87AB56B2193E50C8007D6CF2 /* No_Strings_Attached.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = No_Strings_Attached.txt; sourceTree = "<group>"; };
@@ -89,7 +87,6 @@
 				87AB569D193D3459007D6CF2 /* Game.h */,
 				87AB569C193D3459007D6CF2 /* Game.cpp */,
 				87AB56A7193D3E9A007D6CF2 /* GameElement.h */,
-				87AB56A6193D3E9A007D6CF2 /* GameElement.cpp */,
 				87AB56A4193D3D4C007D6CF2 /* Playset.h */,
 				87AB56A3193D3D4C007D6CF2 /* Playset.cpp */,
 				87F4C928193FFD3600CBB824 /* Player.h */,
@@ -177,7 +174,6 @@
 				87F4C929193FFD3600CBB824 /* Player.cpp in Sources */,
 				87AB56A5193D3D4C007D6CF2 /* Playset.cpp in Sources */,
 				87AB569E193D3459007D6CF2 /* Game.cpp in Sources */,
-				87AB56A8193D3E9A007D6CF2 /* GameElement.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

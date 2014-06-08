@@ -132,11 +132,18 @@ void Game::SelectElements()
         {
             if (numbersAvailable[i] > 0 || totalNumbersAvailable() == 1) //if the element is available, display it with its number
             {
-                cout << i+1 << ") " << getPlaysetItem(elementType, subcategory, i).description << endl;
+                cout << i+1 << ") " << getPlaysetItem(elementType, subcategory, i+1).description << endl;
             }
         }
+        do{
         elementNumber = cinInt(6, 1, "Invalid Choice. If you dislike your previous selection, you can clear it at the end of this menu set.");
-        elementNumber -= 1; //adjust for the fact that people count from 1 and computers count from 0
+            if (numbersAvailable[elementNumber-1] < 1)
+            {
+                cout << "That number is unavailable" << endl;
+            }
+        }while (numbersAvailable[elementNumber-1] < 1);
+        
+        //element does not get decremented, because there is a category title in element 0.
         
         //if the element is not a relationship, ask to confirm their choice.
         if (getPlaysetItem(elementType, subcategory, elementNumber).type != 0)
@@ -171,7 +178,7 @@ void Game::SelectElements()
             cout << "1) yes\n2) no" << endl;
             choice = cinInt(2, 1, "Invalid Choice");
             
-            if (choice == 2)
+            if (choice == 1) //if they
             {
                 //selecting the players for the relationship has to happen before the element choice is confirmed, so it can be checked against available needed relationships
                 cout << "Pick the first player in this relationship. If the relationship has direction, this will be the player with the first half of the relationship" << endl;
@@ -181,11 +188,11 @@ void Game::SelectElements()
                     cout << Players[i].nameCharacter << " is player number " << i << endl;
                 }
                 
-                player1 = cinInt(6, 0, "Invalid Choice");
+                player1 = cinInt(6, 1, "Invalid Choice");
                 
                 cout << "Now pick the second player in the relationship." << endl;
                 //can't replace with cinInt because it also needs to not equal player 1.
-                while ( (!(cin >> player2)) || player2 < 0 || player2 > numberOfPlayers || player1 == player2)
+                while ( (!(cin >> player2)) || player2 < 1 || player2 > numberOfPlayers || player1 == player2)
                 {
                     cin.clear();
                     cin.ignore(INT_MAX,'\n');
@@ -223,7 +230,7 @@ void Game::SelectElements()
         if (choice == 1)
         {
             // if they say "choose this element", use the die
-            numbersAvailable[elementNumber] -= 1;
+            numbersAvailable[elementNumber-1] -= 1;
             
             if (elementType != 0)
             {
@@ -322,26 +329,37 @@ void Game::assignRelationship(Relationship r1, int player1, int player2)
     assert(player2 > 0 && player2 <= Game::numberOfPlayers); //make sure that the number of players is valid
     string temp;
     
+    //mark that the element has been chosen, if it is a needed element
+    MarkNeededElementChosen(r1, player1, player2);
+    
     if (r1.hasDirection == true)
     {
         //SAMPLE: Eldonar is the admirer in a romantic relationship of admirer and admired with Joseph
-        temp = Players[player1].nameCharacter + " is the " + r1.description1 + " in a " + r1.category.substr(2, r1.category.size() -2)+ " relationship  of "+ r1.description + " with " + Players[player2].nameCharacter;
+        temp = Players[player1].nameCharacter + " is the " + r1.description1 + " in a " + r1.category.substr(2, r1.category.size() -2)+ " relationship of "+ r1.description + " with " + Players[player2].nameCharacter;
         Players[player1].GameElementDescriptions.push_back(temp);
-        
+        cout << temp << endl;
         
         //SAMPLE: Joseph is the admired in a romantic relationship of admirer and admired with Eldonar.
-        temp = Players[player2].nameCharacter + " is the " + r1.description2 + " in a " + r1.category.substr(2, r1.category.size() -2)+ " relationship  of "+ r1.description + " with " + Players[player1].nameCharacter;
+        temp = Players[player2].nameCharacter + " is the " + r1.description2 + " in a " + r1.category.substr(2, r1.category.size() -2)+ " relationship of "+ r1.description + " with " + Players[player1].nameCharacter;
         Players[player1].GameElementDescriptions.push_back(temp);
+        cout << temp << endl;
         
     }
     else
     {
-        temp = Players[player1].nameCharacter + " has a " + r1.category.substr(2, r1.category.size() -2)+ " relationship  of "+ r1.description + " with " + Players[player2].nameCharacter;
+        temp = Players[player1].nameCharacter + " has a " + r1.category.substr(2, r1.category.size() -2)+ " relationship of "+ r1.description + " with " + Players[player2].nameCharacter;
         Players[player1].GameElementDescriptions.push_back(temp);
+        cout << temp << endl;
         
-        temp = Players[player2].nameCharacter + " has a " + r1.category.substr(2, r1.category.size() -2)+ " relationship  of "+ r1.description + " with " + Players[player1].nameCharacter;
+        temp = Players[player2].nameCharacter + " has a " + r1.category.substr(2, r1.category.size() -2)+ " relationship of "+ r1.description + " with " + Players[player1].nameCharacter;
         Players[player2].GameElementDescriptions.push_back(temp);
+        cout << temp << endl;
     }
+    
+    
+    cout << "enter anything to continue" << endl;
+    cin.ignore(INT_MAX,'\n');
+    cin.get();
     
 }
 //method to assign needs, locations, and objects
@@ -351,6 +369,8 @@ void Game::assignNonRelationshipElement(GameElement element, int playerNumber)
     assert(element.type >= 1 && element.type <=3); //make sure that type is valid, type 0 is a relationship
     
     string temp;
+    //mark that the element has been chosen
+    MarkNeededElementChosen(element);
     
     if (playerNumber != 0)
     {
@@ -384,12 +404,13 @@ void Game::assignNonRelationshipElement(GameElement element, int playerNumber)
     }//close else
     
     //add the generated line describing the game element to the player's array of game elements that affect them.
+    
     Players[playerNumber].GameElementDescriptions.push_back(temp);
     cout << temp << endl;
     cout << "enter anything to continue" << endl;
-    cin.ignore(INT_MAX);
-    cin.clear();
-    getline (cin, temp);
+    cin.ignore(INT_MAX,'\n');
+    cin.get();
+    
 }
 
 //returns true if all of the needed elements have been chosen
@@ -532,34 +553,34 @@ int GameThreePlayer::NumberOfNeededElementsLeftToChoose()
     temp = 0;
     if (NeedChosen == false)
     {
-        cout << "Still need to choose a need" << endl;
+        //cout << "Still need to choose a need" << endl;
         ++temp;
     }
     if (LocationChosen == false)
     {
-        cout << "Still need to choose a location" << endl;
+       // cout << "Still need to choose a location" << endl;
         temp++;
     }
     
     if (ObjectChosen == false)
     {
-        cout << "Still need to choose an object" << endl;
+        //cout << "Still need to choose an object" << endl;
         ++temp;
     }
     if (Relationship12Chosen == false)
     {
-        cout << "Still need a relationship between " << Players[1].nameCharacter << " and " << Players[2].nameCharacter << endl;
+        //cout << "Still need a relationship between " << Players[1].nameCharacter << " and " << Players[2].nameCharacter << endl;
         ++temp;
     }
     if (Relationship23Chosen == false)
     {
-        cout << "Still need a relationship between " << Players[2].nameCharacter << " and " << Players[3].nameCharacter << endl;
+        //cout << "Still need a relationship between " << Players[2].nameCharacter << " and " << Players[3].nameCharacter << endl;
         ++temp;
     }
     //here starts where this method is different for the game because of the number of players
     if (Relationship13Chosen == false)
     {
-        cout << "Still need a relationship between " << Players[1].nameCharacter << " and " << Players[3].nameCharacter << endl;
+        //cout << "Still need a relationship between " << Players[1].nameCharacter << " and " << Players[3].nameCharacter << endl;
         ++temp;
     }
     
@@ -568,42 +589,42 @@ int GameThreePlayer::NumberOfNeededElementsLeftToChoose()
 int GameFourPlayer::NumberOfNeededElementsLeftToChoose()
 {
     int temp;
-    temp = true;
+    temp = 0;
     if (NeedChosen == false)
     {
-        cout << "Still need to choose a need" << endl;
+       // cout << "Still need to choose a need" << endl;
         temp++;
     }
     if (LocationChosen == false)
     {
-        cout << "Still need to choose a location" << endl;
+       // cout << "Still need to choose a location" << endl;
         temp++;
     }
     
     if (ObjectChosen == false)
     {
-        cout << "Still need to choose an object" << endl;
+       // cout << "Still need to choose an object" << endl;
         temp++;
     }
     if (Relationship12Chosen == false)
     {
-        cout << "Still need a relationship between " << Players[1].nameCharacter << " and " << Players[2].nameCharacter << endl;
+        //cout << "Still need a relationship between " << Players[1].nameCharacter << " and " << Players[2].nameCharacter << endl;
         temp++;
     }
     if (Relationship23Chosen == false)
     {
-        cout << "Still need a relationship between " << Players[1].nameCharacter << " and " << Players[3].nameCharacter << endl;
+       // cout << "Still need a relationship between " << Players[1].nameCharacter << " and " << Players[3].nameCharacter << endl;
         temp++;
     }
     //here starts where this method is different for the game because of the number of players
     if (Relationship34Chosen == false)
     {
-        cout << "Still need a relationship between " << Players[3].nameCharacter << " and " << Players[4].nameCharacter << endl;
+        //cout << "Still need a relationship between " << Players[3].nameCharacter << " and " << Players[4].nameCharacter << endl;
         temp++;
     }
     if (Relationship14Chosen == false)
     {
-        cout << "Still need a relationship between " << Players[1].nameCharacter << " and " << Players[4].nameCharacter << endl;
+       // cout << "Still need a relationship between " << Players[1].nameCharacter << " and " << Players[4].nameCharacter << endl;
         temp++;
     }
     
@@ -612,46 +633,46 @@ int GameFourPlayer::NumberOfNeededElementsLeftToChoose()
 int GameFivePlayer::NumberOfNeededElementsLeftToChoose()
 {
     int temp;
-    temp = true;
+    temp = 0;
     if (NeedChosen == false)
     {
-        cout << "Still need to choose a need" << endl;
+        //cout << "Still need to choose a need" << endl;
         temp++;
     }
     if (LocationChosen == false)
     {
-        cout << "Still need to choose a location" << endl;
+        //cout << "Still need to choose a location" << endl;
         temp++;
     }
     if (ObjectChosen == false)
     {
-        cout << "Still need to choose an object" << endl;
+       // cout << "Still need to choose an object" << endl;
         temp++;
     }
     if (Relationship12Chosen == false)
     {
-        cout << "Still need a relationship between " << Players[1].nameCharacter << " and " << Players[2].nameCharacter << endl;
+        //cout << "Still need a relationship between " << Players[1].nameCharacter << " and " << Players[2].nameCharacter << endl;
         temp++;
     }
     if (Relationship23Chosen == false)
     {
-        cout << "Still need a relationship between " << Players[1].nameCharacter << " and " << Players[3].nameCharacter << endl;
+        //cout << "Still need a relationship between " << Players[1].nameCharacter << " and " << Players[3].nameCharacter << endl;
         temp++;
     }
     //here starts where this method is different for the game because of the number of players
     if (Relationship34Chosen == false)
     {
-        cout << "Still need a relationship between " << Players[3].nameCharacter << " and " << Players[4].nameCharacter << endl;
+        //cout << "Still need a relationship between " << Players[3].nameCharacter << " and " << Players[4].nameCharacter << endl;
         temp++;
     }
     if (Relationship45Chosen == false)
     {
-        cout << "Still need a relationship between " << Players[4].nameCharacter << " and " << Players[5].nameCharacter << endl;
+        //cout << "Still need a relationship between " << Players[4].nameCharacter << " and " << Players[5].nameCharacter << endl;
         temp++;
     }
     if (Relationship15Chosen == false)
     {
-        cout << "Still need a relationship between " << Players[1].nameCharacter << " and " << Players[5].nameCharacter << endl;
+        //cout << "Still need a relationship between " << Players[1].nameCharacter << " and " << Players[5].nameCharacter << endl;
         temp++;
     }
     
@@ -775,10 +796,123 @@ bool GameFivePlayer::IsNeededUnchosenElement(GameElement element, int player1, i
         {
             temp = true;
         }
-        
+    }
+    return temp;
+}
+
+void GameThreePlayer::MarkNeededElementChosen(GameElement element, int player1, int player2)
+{
+    if (element.type == 1 && NeedChosen == false)
+    {
+        NeedChosen = true;
+    }
+    if (element.type == 2 && LocationChosen == false)
+    {
+        LocationChosen = true;
+    }
+    if (element.type == 3 && ObjectChosen == false)
+    {
+        ObjectChosen = true;
+    }
+    //here starts where this method is different for the game because of the number of players
+    
+    if (element.type == 0)
+    {
+        if ( ( (player1 == 1 && player2 == 2) || (player2 == 1 && player1 == 2) ) && Relationship12Chosen == false)
+        {
+            Relationship12Chosen = true;
+        }
+        if ( ( (player1 == 2 && player2 == 3) || (player2 == 2 && player1 == 3) ) && Relationship23Chosen == false)
+        {
+            Relationship23Chosen = true;
+        }
+        if ( ( (player1 == 1 && player2 == 3) || (player2 == 1 && player1 == 3) ) && Relationship13Chosen == false)
+        {
+            Relationship13Chosen = true;
+        }
     }
     
-    return temp;
+    return;
+}
+void GameFourPlayer::MarkNeededElementChosen(GameElement element, int player1, int player2)
+{
+    
+    if (element.type == 1 && NeedChosen == false)
+    {
+        NeedChosen = true;
+    }
+    if (element.type == 2 && LocationChosen == false)
+    {
+        LocationChosen = true;
+    }
+    if (element.type == 3 && ObjectChosen == false)
+    {
+        ObjectChosen = true;
+    }
+    //here starts where this method is different for the game because of the number of players
+    if (element.type == 0)
+    {
+        if ( ( (player1 == 1 && player2 == 2) || (player2 == 1 && player1 == 2) ) && Relationship12Chosen == false)
+        {
+            Relationship12Chosen = true;
+        }
+        if ( ( (player1 == 2 && player2 == 3) || (player2 == 2 && player1 == 3) ) && Relationship23Chosen == false)
+        {
+            Relationship23Chosen = true;
+        }
+        if ( ( (player1 == 3 && player2 == 4) || (player2 == 3 && player1 == 4) ) && Relationship34Chosen == false)
+        {
+            Relationship34Chosen = true;
+        }
+        if ( ( (player1 == 1 && player2 == 4) || (player2 == 1 && player1 == 4) ) && Relationship14Chosen == false)
+        {
+            Relationship14Chosen = true;
+        }
+    }
+    
+    return;
+}
+void GameFivePlayer::MarkNeededElementChosen(GameElement element, int player1, int player2)
+{
+    
+    if (element.type == 1 && NeedChosen == false)
+    {
+        NeedChosen = true;
+    }
+    if (element.type == 2 && LocationChosen == false)
+    {
+        LocationChosen = true;
+    }
+    if (element.type == 3 && ObjectChosen == false)
+    {
+        ObjectChosen = true;
+    }
+    //here starts where this method is different for the game because of the number of players
+    if (element.type == 0)
+    {
+        if ( ((player1 == 1 && player2 == 2) || (player2 == 1 && player1 == 2)) && Relationship12Chosen == false)
+        {
+            Relationship12Chosen = true;
+        }
+        if ( ((player1 == 2 && player2 == 3) || (player2 == 2 && player1 == 3)) && Relationship23Chosen == false)
+        {
+            Relationship23Chosen = true;
+        }
+        if ( ((player1 == 3 && player2 == 4) || (player2 == 3 && player1 == 4)) && Relationship34Chosen == false)
+        {
+            Relationship34Chosen = true;
+        }
+        if ( ((player1 == 4 && player2 == 5) || (player2 == 4 && player1 == 5)) && Relationship45Chosen == false)
+        {
+            Relationship45Chosen = true;
+        }
+        if ( ((player1 == 1 && player2 == 5) || (player2 == 1 && player1 == 5)) && Relationship15Chosen == false)
+        {
+            Relationship15Chosen = true;
+        }
+    }
+    return;
+
 }
 
 
@@ -834,6 +968,10 @@ Relationship Game::getPlaysetRelationship(int j, int k)
 
 int Game::totalNumbersAvailable()
 {
+    for (int i = 0; i < 6; ++i)
+    {
+        assert (numbersAvailable[i] >= 0);
+    }
     return (numbersAvailable[0] + numbersAvailable[1] + numbersAvailable[2] + numbersAvailable[3] + numbersAvailable[4] + numbersAvailable[5]);
 }
 

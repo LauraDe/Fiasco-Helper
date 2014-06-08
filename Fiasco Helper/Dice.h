@@ -20,5 +20,4 @@ public:
     int roll();
     
 };
-
 #endif /* defined(__Fiasco_Helper__Dice__) */

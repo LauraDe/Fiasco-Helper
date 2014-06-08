@@ -6,6 +6,13 @@
 //  Copyright (c) 2014 Laura Delaney. All rights reserved.
 //
 
+
+
+/*
+ BUGS:
+ can choose elements without the dice for them
+ */
+
 #include <iostream>
 #include "Game.h"
 #include "Dice.h"
@@ -16,7 +23,7 @@ using namespace std;
 
 int Welcome();
 
-const string whereIAm = "/Users/Kittywizard/Documents/CS 171/Other/Fiasco Helper/Resources";
+const string whereIAm = "/Users/Kittywizard/Documents/CS 171/Other/Fiasco Helper/Resources"; //fix in playset line 19
 
 int main()
 {
@@ -64,9 +71,9 @@ int Welcome()
     
     cout << "Please enter the number of players for this game." << endl;
     
+    
     while (temp < 3 || temp > 5)
     {
-        
         if (!(cin >> temp))
         {
             cin.clear();
@@ -78,7 +85,6 @@ int Welcome()
         {
             cout << "invalid input \n";
         }
-        
     }
     
     return temp;
