@@ -112,6 +112,7 @@ void Game::SelectElements()
     
     do{
         Game::SetupMenuOfAvailableGameElements();
+        //this section prompts the user to input which element they would like to add
         cout << "What type of element would you like to add?" << endl;
         cout << "0) Relationship\n" << "1) Need\n" << "2) Location\n" << "3) Object" << endl;
         
@@ -135,9 +136,10 @@ void Game::SelectElements()
                 cout << i+1 << ") " << getPlaysetItem(elementType, subcategory, i+1).description << endl;
             }
         }
+        
         do{
         elementNumber = cinInt(6, 1, "Invalid Choice. If you dislike your previous selection, you can clear it at the end of this menu set.");
-            if (numbersAvailable[elementNumber-1] < 1)
+            if (numbersAvailable[elementNumber-1] < 1 && totalNumbersAvailable() != 1)
             {
                 cout << "That number is unavailable" << endl;
             }
@@ -148,15 +150,32 @@ void Game::SelectElements()
         //if the element is not a relationship, ask to confirm their choice.
         if (getPlaysetItem(elementType, subcategory, elementNumber).type != 0)
         {
-        cout << "Do you wish choose the element " << getPlaysetItem(elementType, subcategory, elementNumber).description << endl;
-        cout << "1) yes\n2) no" << endl;
-        choice = cinInt(2, 1, "Invalid Choice");
+            cout << "Do you wish choose the element " << getPlaysetItem(elementType, subcategory, elementNumber).description << endl;
+            cout << "1) yes\n2) no" << endl;
+            choice = cinInt(2, 1, "Invalid Choice");
+        
+            if (choice != 2) // if they choose the element, have them pick the player number, so it can be checked to see if it is a needed element
+            {
+                if (elementType != 0)
+                {
+                    cout << "Pick a player number to assign this element to. Enter 0 for a general element" << endl;
+                    //list the player names
+                    for (int i = 1; i <= numberOfPlayers; ++i)
+                    {
+                        cout << Players[i].nameCharacter << " is player number " << i << endl;
+                    }
+                    
+                    player1 = cinInt(numberOfPlayers, 0, "Invalid Choice");
+            }
+            }
             
             //can skip this step if all of the needed elements have been chosen, or if they said no to the element
             if (AllNeededElementsChosen() == false && choice != 2)
             {
                 //can skip this step if the element is an unchosen needed element
-                if (IsNeededUnchosenElement(getPlaysetItem(elementType, subcategory, elementNumber)) == false)
+                assert(player1 >= 0 && player1 <= numberOfPlayers); //program thinks player1 could be unititialized, I don't. Therefore using an assertation to confirm this.
+                
+                if (IsNeededUnchosenElement(getPlaysetItem(elementType, subcategory, elementNumber), player1) == false)
                 {
                     //if there are more dice left than elements needed, the user gets a warning and a second chance to rechoose their element
                     if (NumberOfNeededElementsLeftToChoose() < totalNumbersAvailable())
@@ -234,15 +253,7 @@ void Game::SelectElements()
             
             if (elementType != 0)
             {
-                cout << "Pick a player number to assign this element to. Enter 0 for a general element" << endl;
-                //list the player names
-                for (int i = 1; i <= numberOfPlayers; ++i)
-                {
-                    cout << Players[i].nameCharacter << " is player number " << i << endl;
-                }
-                
-                player1 = cinInt(numberOfPlayers, 0, "Invalid Choice");
-                
+                //player number is set earlier
                 
                 //assing the element
                 assignNonRelationshipElement(getPlaysetItem(elementType, subcategory, elementNumber), player1);
@@ -370,7 +381,7 @@ void Game::assignNonRelationshipElement(GameElement element, int playerNumber)
     
     string temp;
     //mark that the element has been chosen
-    MarkNeededElementChosen(element);
+    MarkNeededElementChosen(element, playerNumber);
     
     if (playerNumber != 0)
     {
@@ -420,17 +431,17 @@ bool GameThreePlayer::AllNeededElementsChosen()
     temp = true;
     if (NeedChosen == false)
     {
-        cout << "Still need to choose a need" << endl;
+        cout << "Still need to choose a general need" << endl;
         temp = false;
     }
     if (LocationChosen == false)
     {
-        cout << "Still need to choose a location" << endl;
+        cout << "Still need to choose a general location" << endl;
         temp = false;
     }
     if (ObjectChosen == false)
     {
-        cout << "Still need to choose an object" << endl;
+        cout << "Still need to choose a general object" << endl;
         temp = false;
     }
     if (Relationship12Chosen == false)
@@ -458,17 +469,17 @@ bool GameFourPlayer::AllNeededElementsChosen()
     temp = true;
     if (NeedChosen == false)
     {
-        cout << "Still need to choose a need" << endl;
+        cout << "Still need to choose a general need" << endl;
         temp = false;
     }
     if (LocationChosen == false)
     {
-        cout << "Still need to choose a location" << endl;
+        cout << "Still need to choose a general location" << endl;
         temp = false;
     }
     if (ObjectChosen == false)
     {
-        cout << "Still need to choose an object" << endl;
+        cout << "Still need to choose a general object" << endl;
         temp = false;
     }
     if (Relationship12Chosen == false)
@@ -501,19 +512,19 @@ bool GameFivePlayer::AllNeededElementsChosen()
     temp = true;
     if (NeedChosen == false)
     {
-        cout << "Still need to choose a need" << endl;
+        cout << "Still need to choose a general need" << endl;
         temp = false;
     }
     
     if (LocationChosen == false)
     {
-        cout << "Still need to choose a location" << endl;
+        cout << "Still need to choose a general location" << endl;
         temp = false;
     }
     
     if (ObjectChosen == false)
     {
-        cout << "Still need to choose an object" << endl;
+        cout << "Still need to choose a general object" << endl;
         temp = false;
     }
     if (Relationship12Chosen == false)
@@ -553,18 +564,18 @@ int GameThreePlayer::NumberOfNeededElementsLeftToChoose()
     temp = 0;
     if (NeedChosen == false)
     {
-        //cout << "Still need to choose a need" << endl;
+        //cout << "Still need to choose a general need" << endl;
         ++temp;
     }
     if (LocationChosen == false)
     {
-       // cout << "Still need to choose a location" << endl;
+       // cout << "Still need to choose a general location" << endl;
         temp++;
     }
     
     if (ObjectChosen == false)
     {
-        //cout << "Still need to choose an object" << endl;
+        //cout << "Still need to choose a general object" << endl;
         ++temp;
     }
     if (Relationship12Chosen == false)
@@ -592,18 +603,18 @@ int GameFourPlayer::NumberOfNeededElementsLeftToChoose()
     temp = 0;
     if (NeedChosen == false)
     {
-       // cout << "Still need to choose a need" << endl;
+       // cout << "Still need to choose a general need" << endl;
         temp++;
     }
     if (LocationChosen == false)
     {
-       // cout << "Still need to choose a location" << endl;
+       // cout << "Still need to choose a general location" << endl;
         temp++;
     }
     
     if (ObjectChosen == false)
     {
-       // cout << "Still need to choose an object" << endl;
+       // cout << "Still need to choose a general object" << endl;
         temp++;
     }
     if (Relationship12Chosen == false)
@@ -684,15 +695,15 @@ bool GameThreePlayer::IsNeededUnchosenElement(GameElement element, int player1, 
 {
     bool temp = false;
     
-    if (element.type == 1 && NeedChosen == false)
+    if (element.type == 1 && NeedChosen == false && player1 == 0)
     {
         temp = true;
     }
-    if (element.type == 2 && LocationChosen == false)
+    if (element.type == 2 && LocationChosen == false && player1 == 0)
     {
         temp = true;
     }
-    if (element.type == 3 && ObjectChosen == false)
+    if (element.type == 3 && ObjectChosen == false && player1 == 0)
     {
         temp = true;
     }
@@ -721,15 +732,15 @@ bool GameFourPlayer::IsNeededUnchosenElement(GameElement element, int player1, i
 {
     bool temp = false;
     
-    if (element.type == 1 && NeedChosen == false)
+    if (element.type == 1 && NeedChosen == false && player1 == 0)
     {
         temp = true;
     }
-    if (element.type == 2 && LocationChosen == false)
+    if (element.type == 2 && LocationChosen == false && player1 == 0)
     {
         temp = true;
     }
-    if (element.type == 3 && ObjectChosen == false)
+    if (element.type == 3 && ObjectChosen == false && player1 == 0)
     {
         temp = true;
     }
@@ -761,15 +772,15 @@ bool GameFivePlayer::IsNeededUnchosenElement(GameElement element, int player1, i
 {
     bool temp = false;
     
-    if (element.type == 1 && NeedChosen == false)
+    if (element.type == 1 && NeedChosen == false && player1 == 0)
     {
         temp = true;
     }
-    if (element.type == 2 && LocationChosen == false)
+    if (element.type == 2 && LocationChosen == false && player1 == 0)
     {
         temp = true;
     }
-    if (element.type == 3 && ObjectChosen == false)
+    if (element.type == 3 && ObjectChosen == false && player1 == 0)
     {
         temp = true;
     }
@@ -802,15 +813,15 @@ bool GameFivePlayer::IsNeededUnchosenElement(GameElement element, int player1, i
 
 void GameThreePlayer::MarkNeededElementChosen(GameElement element, int player1, int player2)
 {
-    if (element.type == 1 && NeedChosen == false)
+    if (element.type == 1 && NeedChosen == false && player1 == 0)
     {
         NeedChosen = true;
     }
-    if (element.type == 2 && LocationChosen == false)
+    if (element.type == 2 && LocationChosen == false && player1 == 0)
     {
         LocationChosen = true;
     }
-    if (element.type == 3 && ObjectChosen == false)
+    if (element.type == 3 && ObjectChosen == false && player1 == 0)
     {
         ObjectChosen = true;
     }

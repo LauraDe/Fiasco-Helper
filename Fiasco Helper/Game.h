@@ -65,8 +65,8 @@ protected:
     //still need to be implemented
     virtual bool AllNeededElementsChosen () = 0; // =0 because it is a purely virtual function
     virtual int NumberOfNeededElementsLeftToChoose() = 0; //very very similar to allNeededElementsChosen
-    virtual bool IsNeededUnchosenElement(GameElement element, int player1 = 0, int player2 = 0) = 0;
-    virtual void MarkNeededElementChosen(GameElement element, int player1 = 0, int player2 = 0) = 0;
+    virtual bool IsNeededUnchosenElement(GameElement element, int player1, int player2 = 0) = 0;
+    virtual void MarkNeededElementChosen(GameElement element, int player1, int player2 = 0) = 0;
     
     //UTILITY FUNCTIONS:
     void rollAvailableDice(); //rolled during the setup, tilt, and aftermath
@@ -93,8 +93,8 @@ public:
     GameThreePlayer();
     bool AllNeededElementsChosen ();
     int NumberOfNeededElementsLeftToChoose();
-    bool IsNeededUnchosenElement(GameElement element, int player1 = 0, int player2 = 0);
-    void MarkNeededElementChosen(GameElement element, int player1 = 0, int player2 = 0);
+    bool IsNeededUnchosenElement(GameElement element, int player1, int player2 = 0);
+    void MarkNeededElementChosen(GameElement element, int player1, int player2 = 0);
 private:
     bool Relationship13Chosen = false;
 };
@@ -106,8 +106,8 @@ public:
     GameFourPlayer();
     bool AllNeededElementsChosen ();
     int NumberOfNeededElementsLeftToChoose();
-    bool IsNeededUnchosenElement(GameElement element, int player1 = 0, int player2 = 0);
-    void MarkNeededElementChosen(GameElement element, int player1 = 0, int player2 = 0);
+    bool IsNeededUnchosenElement(GameElement element, int player1, int player2 = 0);
+    void MarkNeededElementChosen(GameElement element, int player1, int player2 = 0);
     
 private:
     Player player4;
@@ -122,8 +122,8 @@ public:
     void Setup();
     bool AllNeededElementsChosen ();
     int NumberOfNeededElementsLeftToChoose();
-    bool IsNeededUnchosenElement(GameElement element, int player1 = 0, int player2 = 0);
-    void MarkNeededElementChosen(GameElement element, int player1 = 0, int player2 = 0);
+    bool IsNeededUnchosenElement(GameElement element, int player1, int player2 = 0);
+    void MarkNeededElementChosen(GameElement element, int player1, int player2 = 0);
 private:
     Player player4;
     Player player5;

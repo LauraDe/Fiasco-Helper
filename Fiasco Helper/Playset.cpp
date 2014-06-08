@@ -8,6 +8,10 @@
 
 #include "Playset.h"
 
+//BUGS
+//thinks old married couple is a relationship with direction?
+
+
 //no parameter constructor helps the user choose a playset to load
 Playset::Playset()
 {
@@ -197,11 +201,15 @@ void Playset::load()
                             position = playsetItemsRelationships[j][k].description.find(" and ");
                             
                             //if the relationship has a direction (contains " and " as part of the string), then set description 1 as the first role, and description 2 as the second role
+                        
                             if ( position != string::npos)
                             {
                                 playsetItemsRelationships[j][k].hasDirection = true;
                                 playsetItemsRelationships[j][k].description1 = playsetItemsRelationships[j][k].description.substr(0,position);
                                 playsetItemsRelationships[j][k].description2 = playsetItemsRelationships[j][k].description.substr(position+5, playsetItemsRelationships[j][k].description.length());
+                            }
+                            else{
+                                playsetItemsRelationships[j][k].hasDirection = false;
                             }
                             break;
                         case 1:

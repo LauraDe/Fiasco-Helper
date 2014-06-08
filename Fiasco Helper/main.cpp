@@ -48,6 +48,7 @@ int main()
             newGame.Setup();
             break;
         }
+        //having a default exit_failure case works better than an assert here. To assert I would need the result from welcome to be set
         default:
             cout << "invalid number of players received from the welcome function. Exiting now." << endl;
             exit(EXIT_FAILURE);
