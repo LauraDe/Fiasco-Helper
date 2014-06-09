@@ -20,7 +20,12 @@ private:
 public:
     string nameReal;
     string nameCharacter;
+    
+    //used at the start of round 1, or the end of setup? to set the turn order
+    bool turnRotationSet = false;
+    
     vector<string> GameElementDescriptions; //the game elements themselves are not needed, only the line of description for how it applies to this player matters.
+    
     
 };
 

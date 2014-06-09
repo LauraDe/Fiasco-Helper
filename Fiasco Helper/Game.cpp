@@ -99,7 +99,6 @@ void GameFivePlayer::Setup()
 
 //methods for setup//
 
-
 //used to guide the user to choose an element
 void Game::SelectElements()
 {
@@ -143,7 +142,7 @@ void Game::SelectElements()
             {
                 cout << "That number is unavailable" << endl;
             }
-        }while (numbersAvailable[elementNumber-1] < 1);
+        }while (numbersAvailable[elementNumber-1] < 1 && totalNumbersAvailable() != 1);
         
         //element does not get decremented, because there is a category title in element 0.
         
@@ -302,27 +301,24 @@ void Game::SetupMenuOfAvailableGameElements()
         {
             for (int k = 0; k < 7; ++ k)
             {
-                if (k != 0)
-                {
-                    cout << k << " ";
-                }
-                
-                
                 if (k == 0)
                 {
                     cout << endl << playset1.getItem(i, j, k).description << endl;
                 }
                 else if (Game::numbersAvailable[k-1] > 0) //k-1 because the arrays are offset. element '1' in the getItem call is based off of the number of dice left in element '0' in the numbersAvailable array.
                 {
+                    cout << k << " ";
                     cout << playset1.getItem(i, j, k).description << endl;
                 }
                 //if it is the last die, all elements should be displayed
                 else if (numbersAvailable[0] + numbersAvailable[1] +numbersAvailable[2] +numbersAvailable[3] + numbersAvailable[4] +numbersAvailable[5] == 1)
                 {
+                    cout << k << " ";
                     cout << playset1.getItem(i, j, k).description << endl; //breakpoint here so I can make sure that it is being called correctly
                 }
                 else{
-                    cout << "There are none of this element left" << endl;
+                    //cout << "There are none of this element left" << endl;
+                    //
                 }
             }//close for k
         }//close for j
@@ -925,9 +921,97 @@ void GameFivePlayer::MarkNeededElementChosen(GameElement element, int player1, i
     return;
 
 }
+/*END OF SETUP METHODS*/
+
+/*
+ Round 1, and Round 2 need:
+ to have scenes (2 per player)
+ in a set order
+ to assign light and dark dice to players
+ to say how many light and how many dark dice are left
+ 
+ Round 1 needs:
+ to assign dice to other players
+ 
+ Round 2 needs:
+ the same player to keep the dice
+ 
+ scenes need:
+ to establish or resolve
+ to remind the player whose scene it is of their list of game elements, as well as the general game elements
+ tell the round whether a dark die or light die was used
+ */
+
+void Game::Round1()
+{
+    //set the order of who will do scenes first, second, third, etc. This will remain constant for the whole game
+    SetTurnRotationOrder();
+    
+    
+    for (int i = 0; i < (2 * numberOfPlayers); ++i)
+    {
+        //Scene((i % numberOfPlayers));
+    }
+}
+
+void Game::Round2()
+{
+    
+}
+
+/* Methods Called by Round1 and Round 2*/
+//sets the order of who will do scenes first, second, third, etc. This will remain constant for the whole game
+void Game::SetTurnRotationOrder()
+{
+    
+    //prompt the users to set the turn rotation
+    cout << "The player in position 1 (different than player number 1) will go first. The player in position two will go second, and so on and so forth." << endl;
+    //looping through as many times as there are players to assign, assign the players
+    for (int i = 0; i < numberOfPlayers; ++i)
+    {
+        cout << "Choose a player for postiion "<< i+1 << endl;
+        
+        for (int j = 0; j < numberOfPlayers; ++j)
+        {
+            //if the player does not have a spot in the turn rotation, display their name and number
+            if (Players[j+1].turnRotationSet == false)
+            {
+                cout << j+1 << ") " << Players[j+1].nameCharacter << endl;
+            }
+        }
+        
+        //input the choice, making sure that the player has not been chosen yet
+        int temp;
+        bool isSameCheck;
+        do{
+            isSameCheck = false;
+            //directly below is where their choice is read in, via the cinInt function that sanitizes the input.
+            temp = cinInt(numberOfPlayers, 1, "Invalid Choice");
+            for (int l = 0; l < playerTurnOrder.size(); ++l)
+            {
+                if (playerTurnOrder[l] == temp)
+                {
+                    isSameCheck = true;
+                    cout << "That player has been chosen. Please choose another player." << endl;
+                }
+            }
+        }while (isSameCheck == true);
+        
+        //once a valid choice has been made, add the player's number to the turn order vector, and set the flag for the player that says that they are in the turn rotation. This will keep them from being in the rotation twice.
+        playerTurnOrder.push_back(temp);
+        Players[temp].turnRotationSet = true;
+    }
+}
+
+void Game::Scene()
+{
+    
+}
 
 
-//Utility functions
+
+/*Utility functions*/
+
 //rolls the available dice, and tallies the results in an array, used in the setup, tilt, and aftermath
 void Game::rollAvailableDice()
 {
@@ -955,6 +1039,7 @@ void Game::rollAvailableDice()
     }
 }
 
+//reads in an integer, and checks to be sure it is an integer, and that it is between the lower limit and the upper limit, INCLUSIVE
 int Game::cinInt(int upperLimit, int lowerLimit, string errorMessage)
 {
     int temp;
@@ -967,16 +1052,18 @@ int Game::cinInt(int upperLimit, int lowerLimit, string errorMessage)
     }
     return temp;
 }
-
+//gets a game element based on the input (type, subcategory, element number)
 GameElement Game::getPlaysetItem(int i, int j, int k)
 {
     return playset1.getItem(i, j, k);
 }
+//gets a relationship game element based on the input (subcategory, element number)
 Relationship Game::getPlaysetRelationship(int j, int k)
 {
     return playset1.getRelationship(j, k);
 }
 
+//returns the total number of available dice rolled. Used during setup. Possibly useful during the tilt and aftermath as well.
 int Game::totalNumbersAvailable()
 {
     for (int i = 0; i < 6; ++i)
@@ -985,5 +1072,3 @@ int Game::totalNumbersAvailable()
     }
     return (numbersAvailable[0] + numbersAvailable[1] + numbersAvailable[2] + numbersAvailable[3] + numbersAvailable[4] + numbersAvailable[5]);
 }
-
-

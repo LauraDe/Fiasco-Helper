@@ -24,7 +24,8 @@ class Game
 
 public:
     int numberOfPlayers; // 3, 4, or 5
-
+    vector<int> playerTurnOrder; // 3, 4, or 5 players
+    
     //the below functions are used to run the game
     virtual void Setup() = 0; // =0 means its a pure virtual function, will only be called from the subclasses, can only create subclasses
     void Round1();
@@ -67,6 +68,10 @@ protected:
     virtual int NumberOfNeededElementsLeftToChoose() = 0; //very very similar to allNeededElementsChosen
     virtual bool IsNeededUnchosenElement(GameElement element, int player1, int player2 = 0) = 0;
     virtual void MarkNeededElementChosen(GameElement element, int player1, int player2 = 0) = 0;
+    
+    //METHODS USED BY ROUND1
+    void SetTurnRotationOrder();
+    
     
     //UTILITY FUNCTIONS:
     void rollAvailableDice(); //rolled during the setup, tilt, and aftermath

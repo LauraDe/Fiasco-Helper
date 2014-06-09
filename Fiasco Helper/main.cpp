@@ -34,18 +34,21 @@ int main()
         {
             GameThreePlayer newGame;
             newGame.Setup();
+            newGame.Round1();
             break;
         }
         case 4:
         {
             GameFourPlayer newGame;
             newGame.Setup();
+            newGame.Round1();
             break;
         }
         case 5:
         {
             GameFivePlayer newGame;
             newGame.Setup();
+            newGame.Round1();
             break;
         }
         //having a default exit_failure case works better than an assert here. To assert I would need the result from welcome to be set
