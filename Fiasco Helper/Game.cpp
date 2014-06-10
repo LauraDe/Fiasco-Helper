@@ -18,6 +18,9 @@
  
  NOTES:
  The playset is loaded into the arrays of game elements BEFORE the Game constructor is called.
+ BUGS:
+ assigning dice to other is handled incorrectly
+ 1
  */
 
 //initializes the dice vectors, the vector of players, and the player names
@@ -25,9 +28,11 @@
 Game::Game(int numberOfPlayers)
 {
     this -> numberOfPlayers = numberOfPlayers;
+    //set the vectors of dice to be the of a size on more than the number of players (players plus unassigned dice), and initialize all of the counts of dice to 0
+    lightDice.resize(this ->numberOfPlayers +1, 0);
+    darkDice.resize(this -> numberOfPlayers +1 , 0);
     
-    lightDice.resize(this -> numberOfPlayers +1);
-    darkDice.resize(this -> numberOfPlayers +1);
+    //set the number of unassigned light dice and unassigned dark dice to be equal to two times the number of players. The total number of dice will be four times the number of players
     lightDice[0] = (this -> numberOfPlayers * 2);
     darkDice[0] = (this -> numberOfPlayers * 2);
     
@@ -944,20 +949,95 @@ void GameFivePlayer::MarkNeededElementChosen(GameElement element, int player1, i
 
 void Game::Round1()
 {
+    int choice; // used to assign the die to another player
+    bool LightOrDark; // true is light, false is dark
+    
     //set the order of who will do scenes first, second, third, etc. This will remain constant for the whole game
     SetTurnRotationOrder();
     
-    
+    //run a scene for each player in order, then another scene for each player in order
     for (int i = 0; i < (2 * numberOfPlayers); ++i)
     {
-        //Scene((i % numberOfPlayers));
+        LightOrDark = Scene((playerTurnOrder[i % numberOfPlayers]));
+        cout << "Because this is Round 1, you give your die to another player. Which player would you like to give your die to?" << endl;
+        //display the current dice distribution
+        for (int j = 1; j <= numberOfPlayers; ++j) // should loop through 1, 2, 3, (4), (5),
+        {
+            //used for debugging
+            if (j == playerTurnOrder[i % numberOfPlayers])
+            {
+                cout << "j = " << j << " which is equal to playerTurnOrder " << i << " % " << numberOfPlayers << endl;
+            }
+            
+            //print the player number, name, and number of each dice that they have
+            if (j != playerTurnOrder[i % numberOfPlayers])
+            {
+                cout << playerTurnOrder[j % numberOfPlayers] << " " << Players[playerTurnOrder[j -1]].nameCharacter << " currently has " << lightDice[j] << " light dice and " << darkDice[j] << " dark dice " << endl;
+            }
+        }
+        //read in user input until a valid choice is made
+        do{
+            choice = cinInt(6, 1, "Invalid choice");
+            if (choice == playerTurnOrder[i % numberOfPlayers])
+            {
+                cout << "You cannot give yourself the die" << endl;
+            }
+        }while (choice == playerTurnOrder[i % numberOfPlayers]);
+        
+        
+        //assign the die accordingly
+        //NOTE: do not need to worry about the last die wild card in round1. Do need to worry about it in round two.
+        if (LightOrDark == true)
+        {
+            lightDice[0]--;
+            lightDice[choice]++;
+        }
+        else
+        {
+            darkDice[0]--;
+            darkDice[choice]++;
+        }
     }
+    
 }
 
 void Game::Round2()
 {
+    bool LightOrDark; // true is light, false is dark
+    for (int i = 0; i < (2 * numberOfPlayers); ++i)
+    {
+        LightOrDark = Scene((playerTurnOrder[i % numberOfPlayers]));
+        cout << "Because this is Round 2, you keep your die?" << endl;
+        //assign the die accordingly
+        //NOTE: do not need to worry about the last die wild card in round1. Do need to worry about it in round two.
+        
+        if (LightOrDark == true)
+        {
+            if (lightDice[0] > 0)
+            {
+                lightDice[0]--;
+            }
+            lightDice[i % numberOfPlayers]++;
+        }
+        else
+        {
+            if (darkDice[0] > 0)
+            {
+                darkDice[0]--;
+            }
+            darkDice[i % numberOfPlayers]++;
+        }
+        
+        
+        //display the current dice distribution
+        for (int j = 1; j <= numberOfPlayers; ++j) // should loop through 1, 2, 3, (4), (5),
+        {
+                cout << playerTurnOrder[j % numberOfPlayers] << " " << Players[playerTurnOrder[j -1]].nameCharacter << " currently has " << lightDice[j] << " light dice and " << darkDice[j] << " dark dice " << endl;
+        }
+    }
     
 }
+
 
 /* Methods Called by Round1 and Round 2*/
 //sets the order of who will do scenes first, second, third, etc. This will remain constant for the whole game
@@ -1003,11 +1083,145 @@ void Game::SetTurnRotationOrder()
     }
 }
 
-void Game::Scene()
+//displays the game elements relevant to the scene, prompts the user to choose a light or dark die, forces their choices if there is only one color of dice left, but honors the last dice wildcard. Passes back the color chosen.
+bool Game::Scene(int playerNumber)
 {
+    bool Establishing; //true is establish, false is resolve, //may not end up needing this variable
+    bool LightorDark; //true is light, false is dark
+    
+    //assert that a valid player number was passed through
+    assert (playerNumber > 0 && playerNumber <= numberOfPlayers);
+    
+    //display the general need(s), location(s) and object(s)
+    for (int i = 0; i < Players[0].GameElementDescriptions.size(); ++i)
+    {
+        cout << Players[0].GameElementDescriptions[i] << endl;
+    }
+    //display descriptions of the game elements that affect the player in question
+    for (int i = 0; i < Players[playerNumber].GameElementDescriptions.size(); ++i)
+    {
+        cout << Players[playerNumber].GameElementDescriptions[i] << endl;
+    }
+    
+    //tell the players how many of each type of dice are left
+    cout << "There are " << totalLightLeft() << " light dice left and " << totalDarkLeft() << " dark dice left" << endl;
+    
+   
+    cout << Players[playerNumber].nameReal << " Choose one of the following for " << Players[playerNumber].nameCharacter << ":\n" << "1) Establish\n" <<"2) Resolve" << endl; //string broken up into multiple strings for readability
+    if (cinInt(2, 1, "Invalid Choice") == 1)
+    {
+        //if establishing
+        Establishing = true;
+        if ( (darkDice[0] > 0 && lightDice[0] > 0) || (darkDice[0] + lightDice[0] == 1))
+        {
+            cout << "How did the scene go? " << endl;
+            cout << "Did this end well or poorly?\n" << "1) Well (light die)\n" <<"2)Poorly (dark die)" << endl;
+        
+            if (cinInt(2, 1, "Invalid Choice") == 1)
+            {
+                LightorDark = true;
+            }
+            else
+            {
+                LightorDark = false;
+            }
+        }
+        else if (darkDice[0] == 0)
+        {
+            LightorDark = true;
+            cout << "This must end well, because there are only light dice left" << endl;
+        }
+        else
+        {
+            LightorDark = false;
+            cout << "This must end poorly, because there are only dark dice left" << endl;
+        }
+    }
+    else
+    {
+        //if not establishing, are resolving
+
+        Establishing = false;
+        
+        
+        if ( (darkDice[0] > 0 && lightDice[0] > 0) || (darkDice[0] + lightDice[0] == 1))
+        {
+            cout << "Does this end well or poorly?\n" << "1) Well (light die)\n" <<"2)Poorly (dark die)" << endl;
+
+            if (cinInt(2, 1, "Invalid Choice") == 1)
+            {
+                LightorDark = true;
+            }
+            else
+            {
+                LightorDark = false;
+            }
+        }
+        else if (darkDice[0] == 0)
+        {
+            LightorDark = true;
+            cout << "This must end well, because there are only light dice left" << endl;
+        }
+        else
+        {
+            LightorDark = false;
+            cout << "This must end poorly, because there are only dark dice left" << endl;
+        }
+        
+    }
+    
+    return LightorDark;
+}
+
+
+void Game::Tilt()
+{
+    cout << "This has not been implemented yet. Please do the tilt yourself" << endl;
+    rollAvailableDice();
+    for (int i = 0; i < 6; ++i)
+    {
+        cout << "Dice available that rolled a " << i+1 << ": " << Game::numbersAvailable[i] << endl;
+    }
+    string temp;
+    cout << "Please enter the first tilt in the form TILT ELEMENT must affect CHARACTER NAME" << endl << "For now, these will be stored as general information, and displayed at the start of each scene" << endl;
+    getline(cin, temp);
+    
+    Players[0].GameElementDescriptions.push_back(temp);
+    cout << "Please enter the second tilt in the form TILT ELEMENT must affect CHARACTER NAME" << endl;
+    getline(cin, temp);
     
 }
 
+void Game::Aftermath()
+{
+    cout << "The aftermath has not been fully implemented yet." << endl;
+    cout << "This function will roll the players' dice, and return the score of each player, as well as whether it is light or dark. You will need to look up the results in an aftermath table." << endl;
+    
+    vector<int> playerScore;
+    int temp;
+    for (int i = 1; i <= numberOfPlayers; ++i)
+    {
+        temp = 0;
+        for (int j = 0; j < lightDice[i]; ++j)
+        {
+            temp += d6.roll();
+        }
+        for (int k = 0; k < darkDice[i]; ++k)
+        {
+            temp -= d6.roll();
+        }
+        playerScore.push_back(temp);
+        if (playerScore[i-1] > 0)
+        {
+            cout << Players[i].nameCharacter << ", played by " << Players[i].nameReal << "ended with a light score of " << abs(temp) << endl;
+        }
+        if (playerScore[i-1] < 0)
+        {
+            cout << Players[i].nameCharacter << ", played by " << Players[i].nameReal << "ended with a dark score of " << abs(temp) << endl;
+        }
+                                                                                                                     
+    }
+}
 
 
 /*Utility functions*/
@@ -1068,7 +1282,17 @@ int Game::totalNumbersAvailable()
 {
     for (int i = 0; i < 6; ++i)
     {
-        assert (numbersAvailable[i] >= 0);
+        assert (numbersAvailable[i] >= -1); //can end up as -1 because of the last wildcard dice
     }
     return (numbersAvailable[0] + numbersAvailable[1] + numbersAvailable[2] + numbersAvailable[3] + numbersAvailable[4] + numbersAvailable[5]);
+}
+
+int Game::totalLightLeft()
+{
+    return lightDice[0];
+}
+
+int Game::totalDarkLeft()
+{
+    return darkDice[0];
 }

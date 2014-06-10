@@ -35,6 +35,9 @@ int main()
             GameThreePlayer newGame;
             newGame.Setup();
             newGame.Round1();
+            newGame.Tilt();
+            newGame.Round2();
+            newGame.Aftermath();
             break;
         }
         case 4:
@@ -42,6 +45,9 @@ int main()
             GameFourPlayer newGame;
             newGame.Setup();
             newGame.Round1();
+            newGame.Tilt();
+            newGame.Round2();
+            newGame.Aftermath();
             break;
         }
         case 5:
@@ -49,6 +55,9 @@ int main()
             GameFivePlayer newGame;
             newGame.Setup();
             newGame.Round1();
+            newGame.Tilt();
+            newGame.Round2();
+            newGame.Aftermath();
             break;
         }
         //having a default exit_failure case works better than an assert here. To assert I would need the result from welcome to be set

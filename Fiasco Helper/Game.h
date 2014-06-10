@@ -29,7 +29,7 @@ public:
     //the below functions are used to run the game
     virtual void Setup() = 0; // =0 means its a pure virtual function, will only be called from the subclasses, can only create subclasses
     void Round1();
-    void Scene();
+    bool Scene(int playerNumber); //returns true if a light die was chosen, false if a dark dice was chosen. Round# then determines what happens to the dice.
     void Tilt();
     void Round2();
     void Aftermath();
@@ -76,6 +76,8 @@ protected:
     //UTILITY FUNCTIONS:
     void rollAvailableDice(); //rolled during the setup, tilt, and aftermath
     int cinInt(int upperLimit, int lowerLimit, string errorMessage); //used for reading in integers, sanitizing the input to prevent strings or characters from being read into an integer variable
+    int totalLightLeft();
+    int totalDarkLeft();
     GameElement getPlaysetItem(int i, int j, int k); //gets a game element from the playset arrays
     Relationship getPlaysetRelationship(int j, int k); // gets a relationship from the playset array
     
